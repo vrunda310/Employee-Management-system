@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "quizzes",
+  "info": {
+    "singularName": "quizze",
+    "pluralName": "quizzes",
+    "displayName": "Quizzes"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "instructions": {
+      "type": "text"
+    },
+    "time_limit_minutes": {
+      "type": "integer"
+    },
+    "max_attempts": {
+      "type": "integer",
+      "required": true
+    },
+    "cooldown_hours": {
+      "type": "integer",
+      "required": true,
+      "default": 24
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "quiz_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "quiz_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course.course",
+      "inversedBy": "quizzes"
+    },
+    "quiz_questions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::quiz-question.quiz-question",
+      "mappedBy": "quiz"
+    },
+    "quiz_submissions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::quiz-submission.quiz-submission",
+      "mappedBy": "quiz"
+    }
+  }
+}
