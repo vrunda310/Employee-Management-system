@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "important_links",
+  "info": {
+    "singularName": "important-link",
+    "pluralName": "important-links",
+    "displayName": "Important_links"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true,
+      "unique": false
+    },
+    "display_order": {
+      "type": "integer",
+      "required": true
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "link_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "link_updated_at": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

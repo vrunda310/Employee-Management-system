@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "gallery_items",
+  "info": {
+    "singularName": "gallery-item",
+    "pluralName": "gallery-items",
+    "displayName": "Gallery_items"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "media": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "media_type": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Image",
+        "Video"
+      ]
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "media_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "media_updated_at": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

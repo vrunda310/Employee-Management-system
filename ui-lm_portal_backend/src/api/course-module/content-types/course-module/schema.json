@@ -1,0 +1,126 @@
+{
+  "kind": "collectionType",
+  "collectionName": "course_modules",
+  "info": {
+    "singularName": "course-module",
+    "pluralName": "course-modules",
+    "displayName": "Course_modules"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course.course",
+      "inversedBy": "course_modules"
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "order": {
+      "type": "integer",
+      "required": true
+    },
+    "module_content_type": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Video",
+        "Pdf",
+        "Scrom",
+        "Text",
+        "External_link"
+      ]
+    },
+    "content_url": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "module_content_type"
+            },
+            "External_link"
+          ]
+        }
+      }
+    },
+    "video_file": {
+      "type": "media",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "module_content_type"
+            },
+            "Video"
+          ]
+        }
+      },
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "pdf_file": {
+      "type": "media",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "module_content_type"
+            },
+            "Pdf"
+          ]
+        }
+      },
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "text_content": {
+      "type": "blocks",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "module_content_type"
+            },
+            "Text"
+          ]
+        }
+      }
+    },
+    "module_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "module_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "duration_minutes": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}

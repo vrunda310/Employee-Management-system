@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "clusters",
+  "info": {
+    "singularName": "cluster",
+    "pluralName": "clusters",
+    "displayName": "Cluster"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA ",
+        "Vega"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "cluster_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "cluster_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "city": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::city.city",
+      "inversedBy": "clusters"
+    },
+    "unit_locations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::unit-location.unit-location",
+      "mappedBy": "cluster"
+    },
+    "holidays": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::holiday.holiday",
+      "mappedBy": "cluster"
+    },
+    "routes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::route.route",
+      "mappedBy": "cluster"
+    }
+  }
+}
