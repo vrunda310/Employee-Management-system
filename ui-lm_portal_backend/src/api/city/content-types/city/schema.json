@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cities",
+  "info": {
+    "singularName": "city",
+    "pluralName": "cities",
+    "displayName": "City"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "state": {
+      "type": "string",
+      "required": true
+    },
+    "country": {
+      "type": "string",
+      "required": true
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "city_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "city_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "clusters": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::cluster.cluster",
+      "mappedBy": "city"
+    },
+    "holidays": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::holiday.holiday",
+      "mappedBy": "city"
+    }
+  }
+}

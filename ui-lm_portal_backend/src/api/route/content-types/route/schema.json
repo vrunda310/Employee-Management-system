@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "routes",
+  "info": {
+    "singularName": "route",
+    "pluralName": "routes",
+    "displayName": "Routes"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "route_name": {
+      "type": "string",
+      "required": true
+    },
+    "bus_number": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "route_map_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "start_pickup": {
+      "type": "time"
+    },
+    "reached_at_company": {
+      "type": "time"
+    },
+    "bus_stops": {
+      "type": "json",
+      "required": true
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "route_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "route_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "cluster": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cluster.cluster",
+      "inversedBy": "routes"
+    },
+    "unit_location": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::unit-location.unit-location",
+      "inversedBy": "routes"
+    }
+  }
+}

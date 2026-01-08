@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "company_policies",
+  "info": {
+    "singularName": "company-policy",
+    "pluralName": "company-policies",
+    "displayName": "Company_policies"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "document": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "tags": {
+      "type": "string"
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "policy_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "policy_updated_at": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}
