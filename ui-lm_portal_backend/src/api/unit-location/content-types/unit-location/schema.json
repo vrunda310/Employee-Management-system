@@ -1,0 +1,94 @@
+{
+  "kind": "collectionType",
+  "collectionName": "unit_locations",
+  "info": {
+    "singularName": "unit-location",
+    "pluralName": "unit-locations",
+    "displayName": "Unit_locations"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "address": {
+      "type": "text",
+      "required": true
+    },
+    "contact": {
+      "type": "string",
+      "required": true
+    },
+    "alternative_contact": {
+      "type": "string"
+    },
+    "map_snapshot": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "emergency_gate_images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "location_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "location_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "cluster": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cluster.cluster",
+      "inversedBy": "unit_locations"
+    },
+    "holidays": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::holiday.holiday",
+      "mappedBy": "unit_location"
+    },
+    "routes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::route.route",
+      "mappedBy": "unit_location"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "working_unit_location"
+    }
+  }
+}

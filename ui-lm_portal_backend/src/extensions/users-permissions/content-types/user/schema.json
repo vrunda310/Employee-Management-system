@@ -1,0 +1,190 @@
+{
+  "kind": "collectionType",
+  "collectionName": "up_users",
+  "info": {
+    "name": "user",
+    "description": "",
+    "singularName": "user",
+    "pluralName": "users",
+    "displayName": "User"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "unique": true,
+      "configurable": false,
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "minLength": 6,
+      "configurable": false,
+      "required": true
+    },
+    "provider": {
+      "type": "string",
+      "configurable": false
+    },
+    "password": {
+      "type": "password",
+      "minLength": 6,
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "resetPasswordToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmationToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "role": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.role",
+      "inversedBy": "users",
+      "configurable": false
+    },
+    "employee_id": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "full_name": {
+      "type": "string",
+      "required": true
+    },
+    "department": {
+      "type": "string",
+      "required": true
+    },
+    "user_role": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Admin",
+        "HR",
+        "L&D_Team",
+        "Employee"
+      ]
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "auth_method": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Google_SSO",
+        "Azure_AD",
+        "Employee_Id"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "profile_picture": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "last_login": {
+      "type": "datetime"
+    },
+    "account_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "account_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "user_progresses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::user-progress.user-progress",
+      "mappedBy": "user"
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course.course",
+      "mappedBy": "user"
+    },
+    "course_assignments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course-assignment.course-assignment",
+      "mappedBy": "user"
+    },
+    "quiz_submissions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::quiz-submission.quiz-submission",
+      "mappedBy": "user"
+    },
+    "notifications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::notification.notification",
+      "mappedBy": "user"
+    },
+    "joining_date": {
+      "type": "date",
+      "required": true
+    },
+    "birthday_date": {
+      "type": "date",
+      "required": true
+    },
+    "designation": {
+      "type": "string",
+      "required": true
+    },
+    "events": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::event.event",
+      "mappedBy": "event_created_by"
+    },
+    "working_unit_location": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::unit-location.unit-location",
+      "inversedBy": "users"
+    }
+  }
+}
