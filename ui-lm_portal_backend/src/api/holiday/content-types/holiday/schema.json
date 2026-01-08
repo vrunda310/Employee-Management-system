@@ -1,0 +1,80 @@
+{
+  "kind": "collectionType",
+  "collectionName": "holidays",
+  "info": {
+    "singularName": "holiday",
+    "pluralName": "holidays",
+    "displayName": "Holidays"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "holiday_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "holiday_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "is_optional": {
+      "type": "boolean",
+      "required": false
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "city": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::city.city",
+      "inversedBy": "holidays"
+    },
+    "cluster": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cluster.cluster",
+      "inversedBy": "holidays"
+    },
+    "unit_location": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::unit-location.unit-location",
+      "inversedBy": "holidays"
+    }
+  }
+}

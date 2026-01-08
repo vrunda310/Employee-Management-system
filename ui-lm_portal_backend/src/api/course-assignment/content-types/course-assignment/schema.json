@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "course_assignments",
+  "info": {
+    "singularName": "course-assignment",
+    "pluralName": "course-assignments",
+    "displayName": "Course_assignments "
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "assignment_type": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Department",
+        "Location",
+        "Role",
+        "Individual"
+      ]
+    },
+    "target_value": {
+      "type": "string",
+      "required": true
+    },
+    "due_date": {
+      "type": "date"
+    },
+    "assigned_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "assignment_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "assignment_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "course_assignments"
+    },
+    "course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course.course",
+      "inversedBy": "course_assignments"
+    }
+  }
+}
