@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "news_categories",
+  "info": {
+    "singularName": "news-category",
+    "pluralName": "news-categories",
+    "displayName": "News_categories"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "company": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "category_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "category_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "news": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::news.news",
+      "mappedBy": "news_category"
+    }
+  }
+}

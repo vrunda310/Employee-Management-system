@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "course_categories",
+  "info": {
+    "singularName": "course-category",
+    "pluralName": "course-categories",
+    "displayName": "Course_categories "
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "slug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "display_order": {
+      "type": "integer",
+      "required": true,
+      "default": 0
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "category_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "category_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course.course",
+      "mappedBy": "course_category"
+    },
+    "course_categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course-category.course-category",
+      "mappedBy": "parent_category"
+    },
+    "parent_category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course-category.course-category",
+      "inversedBy": "course_categories"
+    }
+  }
+}

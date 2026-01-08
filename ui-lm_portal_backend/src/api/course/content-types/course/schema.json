@@ -1,0 +1,121 @@
+{
+  "kind": "collectionType",
+  "collectionName": "courses",
+  "info": {
+    "singularName": "course",
+    "pluralName": "courses",
+    "displayName": "Courses"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "blocks",
+      "required": true
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "duration_minutes": {
+      "type": "integer",
+      "required": true
+    },
+    "difficulty_level": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Beginner",
+        "Intermediate",
+        "Advanced"
+      ]
+    },
+    "is_published": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "passing_score": {
+      "type": "integer",
+      "required": true
+    },
+    "certificate_template": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "course_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "course_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "course_modules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course-module.course-module",
+      "mappedBy": "course"
+    },
+    "quizzes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::quizze.quizze",
+      "mappedBy": "course"
+    },
+    "user_progresses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::user-progress.user-progress",
+      "mappedBy": "course"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "courses"
+    },
+    "course_category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course-category.course-category",
+      "inversedBy": "courses"
+    },
+    "course_assignments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course-assignment.course-assignment",
+      "mappedBy": "course"
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::course.course",
+      "inversedBy": "prerequisite_courses"
+    },
+    "prerequisite_courses": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::course.course",
+      "mappedBy": "courses"
+    }
+  }
+}
