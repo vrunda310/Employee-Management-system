@@ -46,14 +46,6 @@
         "audios"
       ]
     },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA",
-        "Vega"
-      ]
-    },
     "is_active": {
       "type": "boolean",
       "required": true
@@ -65,12 +57,6 @@
     "location_updated_at": {
       "type": "datetime",
       "required": true
-    },
-    "cluster": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::cluster.cluster",
-      "inversedBy": "unit_locations"
     },
     "holidays": {
       "type": "relation",
@@ -89,6 +75,30 @@
       "relation": "oneToMany",
       "target": "plugin::users-permissions.user",
       "mappedBy": "working_unit_location"
+    },
+    "announcements": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::announcement.announcement",
+      "mappedBy": "unit_locations"
+    },
+    "departments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::department.department",
+      "mappedBy": "unit_locations"
+    },
+    "area": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::area.area",
+      "inversedBy": "unit_locations"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "unit_locations"
     }
   }
 }

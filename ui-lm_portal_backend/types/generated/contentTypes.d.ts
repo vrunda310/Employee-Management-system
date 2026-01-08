@@ -430,6 +430,105 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAnnouncementAnnouncement
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'announcements';
+  info: {
+    displayName: 'Announcements';
+    pluralName: 'announcements';
+    singularName: 'announcement';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    announcement_created_at: Schema.Attribute.DateTime &
+      Schema.Attribute.Required;
+    announcement_created_by: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    announcement_updated_at: Schema.Attribute.DateTime &
+      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    departments: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::department.department'
+    >;
+    designations: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::designation.designation'
+    >;
+    end_date: Schema.Attribute.Date & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_important: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::announcement.announcement'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.Text & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    role: Schema.Attribute.Enumeration<
+      ['Admin', 'Hr', 'Learning_manager', 'Employee']
+    >;
+    start_date: Schema.Attribute.Date & Schema.Attribute.Required;
+    target_type: Schema.Attribute.Enumeration<
+      ['All', 'Department', 'Designation', 'Location', 'Role']
+    > &
+      Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    unit_locations: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::unit-location.unit-location'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiAreaArea extends Struct.CollectionTypeSchema {
+  collectionName: 'areas';
+  info: {
+    displayName: 'Area';
+    pluralName: 'areas';
+    singularName: 'area';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    area_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    area_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    city: Schema.Attribute.Relation<'manyToOne', 'api::city.city'>;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    holidays: Schema.Attribute.Relation<'oneToMany', 'api::holiday.holiday'>;
+    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::area.area'> &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
+    unit_locations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::unit-location.unit-location'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCityCity extends Struct.CollectionTypeSchema {
   collectionName: 'cities';
   info: {
@@ -441,11 +540,10 @@ export interface ApiCityCity extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    areas: Schema.Attribute.Relation<'oneToMany', 'api::area.area'>;
     city_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     city_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    clusters: Schema.Attribute.Relation<'oneToMany', 'api::cluster.cluster'>;
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     country: Schema.Attribute.String & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -464,47 +562,6 @@ export interface ApiCityCity extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiClusterCluster extends Struct.CollectionTypeSchema {
-  collectionName: 'clusters';
-  info: {
-    displayName: 'Cluster';
-    pluralName: 'clusters';
-    singularName: 'cluster';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    city: Schema.Attribute.Relation<'manyToOne', 'api::city.city'>;
-    cluster_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    cluster_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    company: Schema.Attribute.Enumeration<['AIA ', 'Vega']> &
-      Schema.Attribute.Required;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    description: Schema.Attribute.Text;
-    holidays: Schema.Attribute.Relation<'oneToMany', 'api::holiday.holiday'>;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::cluster.cluster'
-    > &
-      Schema.Attribute.Private;
-    name: Schema.Attribute.String & Schema.Attribute.Required;
-    publishedAt: Schema.Attribute.DateTime;
-    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
-    unit_locations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::unit-location.unit-location'
-    >;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiCompanyPolicyCompanyPolicy
   extends Struct.CollectionTypeSchema {
   collectionName: 'company_policies';
@@ -517,8 +574,7 @@ export interface ApiCompanyPolicyCompanyPolicy
     draftAndPublish: true;
   };
   attributes: {
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -543,6 +599,93 @@ export interface ApiCompanyPolicyCompanyPolicy
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiCompanyCompany extends Struct.CollectionTypeSchema {
+  collectionName: 'companies';
+  info: {
+    displayName: 'Company';
+    pluralName: 'companies';
+    singularName: 'company';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    address: Schema.Attribute.Text & Schema.Attribute.Required;
+    announcements: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::announcement.announcement'
+    >;
+    areas: Schema.Attribute.Relation<'oneToMany', 'api::area.area'>;
+    cities: Schema.Attribute.Relation<'oneToMany', 'api::city.city'>;
+    company_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    company_mail: Schema.Attribute.Email;
+    company_overview: Schema.Attribute.Text;
+    company_policies: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::company-policy.company-policy'
+    >;
+    company_type: Schema.Attribute.String & Schema.Attribute.Required;
+    company_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    courses: Schema.Attribute.Relation<'oneToMany', 'api::course.course'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    departments: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::department.department'
+    >;
+    designations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::designation.designation'
+    >;
+    events: Schema.Attribute.Relation<'oneToMany', 'api::event.event'>;
+    form_templates: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::form-template.form-template'
+    >;
+    gallery_items: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::gallery-item.gallery-item'
+    >;
+    holidays: Schema.Attribute.Relation<'oneToMany', 'api::holiday.holiday'>;
+    important_links: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::important-link.important-link'
+    >;
+    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::company.company'
+    > &
+      Schema.Attribute.Private;
+    logo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    news: Schema.Attribute.Relation<'oneToMany', 'api::news.news'>;
+    news_categories: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::news-category.news-category'
+    >;
+    phone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
+    unit_locations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::unit-location.unit-location'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+    website: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
@@ -712,6 +855,7 @@ export interface ApiCourseCourse extends Struct.CollectionTypeSchema {
     certificate_template: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
     >;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     course_assignments: Schema.Attribute.Relation<
       'oneToMany',
       'api::course-assignment.course-assignment'
@@ -768,6 +912,106 @@ export interface ApiCourseCourse extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
+  collectionName: 'departments';
+  info: {
+    displayName: 'Department';
+    pluralName: 'departments';
+    singularName: 'department';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    announcements: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::announcement.announcement'
+    >;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    department_code: Schema.Attribute.String;
+    department_created_at: Schema.Attribute.DateTime &
+      Schema.Attribute.Required;
+    department_updated_at: Schema.Attribute.DateTime &
+      Schema.Attribute.Required;
+    description: Schema.Attribute.Text;
+    designations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::designation.designation'
+    >;
+    events: Schema.Attribute.Relation<'manyToMany', 'api::event.event'>;
+    holidays: Schema.Attribute.Relation<'manyToMany', 'api::holiday.holiday'>;
+    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::department.department'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    unit_locations: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::unit-location.unit-location'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiDesignationDesignation extends Struct.CollectionTypeSchema {
+  collectionName: 'designations';
+  info: {
+    displayName: 'Designation';
+    pluralName: 'designations';
+    singularName: 'designation';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    announcements: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::announcement.announcement'
+    >;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    department: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::department.department'
+    >;
+    designation_created_at: Schema.Attribute.DateTime &
+      Schema.Attribute.Required;
+    designation_updated_at: Schema.Attribute.DateTime &
+      Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::designation.designation'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
 export interface ApiEventEvent extends Struct.CollectionTypeSchema {
   collectionName: 'events';
   info: {
@@ -783,11 +1027,14 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       'images' | 'files' | 'videos' | 'audios'
     > &
       Schema.Attribute.Required;
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    departments: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::department.department'
+    >;
     description: Schema.Attribute.Text;
     end_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
     event_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
@@ -826,8 +1073,7 @@ export interface ApiFormTemplateFormTemplate
     draftAndPublish: true;
   };
   attributes: {
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -862,8 +1108,7 @@ export interface ApiGalleryItemGalleryItem extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -900,14 +1145,17 @@ export interface ApiHolidayHoliday extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    area: Schema.Attribute.Relation<'manyToOne', 'api::area.area'>;
     city: Schema.Attribute.Relation<'manyToOne', 'api::city.city'>;
-    cluster: Schema.Attribute.Relation<'manyToOne', 'api::cluster.cluster'>;
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     date: Schema.Attribute.Date & Schema.Attribute.Required;
+    departments: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::department.department'
+    >;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     holiday_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     holiday_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
@@ -945,8 +1193,7 @@ export interface ApiImportantLinkImportantLink
     draftAndPublish: true;
   };
   attributes: {
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -983,8 +1230,7 @@ export interface ApiNewsCategoryNewsCategory
   attributes: {
     category_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     category_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1016,8 +1262,7 @@ export interface ApiNewsNews extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     cover_image: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
     > &
@@ -1241,11 +1486,10 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    area: Schema.Attribute.Relation<'manyToOne', 'api::area.area'>;
     bus_number: Schema.Attribute.String;
     bus_stops: Schema.Attribute.JSON & Schema.Attribute.Required;
-    cluster: Schema.Attribute.Relation<'manyToOne', 'api::cluster.cluster'>;
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1287,13 +1531,20 @@ export interface ApiUnitLocationUnitLocation
   attributes: {
     address: Schema.Attribute.Text & Schema.Attribute.Required;
     alternative_contact: Schema.Attribute.String;
-    cluster: Schema.Attribute.Relation<'manyToOne', 'api::cluster.cluster'>;
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    announcements: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::announcement.announcement'
+    >;
+    area: Schema.Attribute.Relation<'manyToOne', 'api::area.area'>;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     contact: Schema.Attribute.String & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    departments: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::department.department'
+    >;
     emergency_gate_images: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
@@ -1838,14 +2089,17 @@ export interface PluginUsersPermissionsUser
   attributes: {
     account_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     account_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    announcements: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::announcement.announcement'
+    >;
     auth_method: Schema.Attribute.Enumeration<
       ['Google_SSO', 'Azure_AD', 'Employee_Id']
     > &
       Schema.Attribute.Required;
     birthday_date: Schema.Attribute.Date & Schema.Attribute.Required;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    company: Schema.Attribute.Enumeration<['AIA', 'Vega']> &
-      Schema.Attribute.Required;
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     course_assignments: Schema.Attribute.Relation<
@@ -1856,8 +2110,14 @@ export interface PluginUsersPermissionsUser
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    department: Schema.Attribute.String & Schema.Attribute.Required;
-    designation: Schema.Attribute.String & Schema.Attribute.Required;
+    department: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::department.department'
+    >;
+    designation: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::designation.designation'
+    >;
     email: Schema.Attribute.Email &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
@@ -1937,13 +2197,17 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::announcement.announcement': ApiAnnouncementAnnouncement;
+      'api::area.area': ApiAreaArea;
       'api::city.city': ApiCityCity;
-      'api::cluster.cluster': ApiClusterCluster;
       'api::company-policy.company-policy': ApiCompanyPolicyCompanyPolicy;
+      'api::company.company': ApiCompanyCompany;
       'api::course-assignment.course-assignment': ApiCourseAssignmentCourseAssignment;
       'api::course-category.course-category': ApiCourseCategoryCourseCategory;
       'api::course-module.course-module': ApiCourseModuleCourseModule;
       'api::course.course': ApiCourseCourse;
+      'api::department.department': ApiDepartmentDepartment;
+      'api::designation.designation': ApiDesignationDesignation;
       'api::event.event': ApiEventEvent;
       'api::form-template.form-template': ApiFormTemplateFormTemplate;
       'api::gallery-item.gallery-item': ApiGalleryItemGalleryItem;

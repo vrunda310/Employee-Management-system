@@ -1,0 +1,137 @@
+{
+  "kind": "collectionType",
+  "collectionName": "announcements",
+  "info": {
+    "singularName": "announcement",
+    "pluralName": "announcements",
+    "displayName": "Announcements"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "message": {
+      "type": "text",
+      "required": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "target_type": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "All",
+        "Department",
+        "Designation",
+        "Location",
+        "Role"
+      ]
+    },
+    "departments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::department.department",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "target_type"
+            },
+            "Department"
+          ]
+        }
+      },
+      "inversedBy": "announcements"
+    },
+    "unit_locations": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::unit-location.unit-location",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "target_type"
+            },
+            "Location"
+          ]
+        }
+      },
+      "inversedBy": "announcements"
+    },
+    "designations": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::designation.designation",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "target_type"
+            },
+            "Designation"
+          ]
+        }
+      },
+      "inversedBy": "announcements"
+    },
+    "is_important": {
+      "type": "boolean",
+      "required": true
+    },
+    "role": {
+      "type": "enumeration",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "target_type"
+            },
+            "Role"
+          ]
+        }
+      },
+      "enum": [
+        "Admin",
+        "Hr",
+        "Learning_manager",
+        "Employee"
+      ]
+    },
+    "start_date": {
+      "type": "date",
+      "required": true
+    },
+    "end_date": {
+      "type": "date",
+      "required": true
+    },
+    "announcement_created_by": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "announcements"
+    },
+    "announcement_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "announcement_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "announcements"
+    }
+  }
+}

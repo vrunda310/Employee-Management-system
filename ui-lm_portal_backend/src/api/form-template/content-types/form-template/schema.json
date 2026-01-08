@@ -29,14 +29,6 @@
     "tags": {
       "type": "string"
     },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA",
-        "Vega"
-      ]
-    },
     "is_active": {
       "type": "boolean",
       "required": true
@@ -48,6 +40,12 @@
     "form_updated_at": {
       "type": "datetime",
       "required": true
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "form_templates"
     }
   }
 }

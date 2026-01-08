@@ -23,14 +23,6 @@
       "type": "string",
       "required": true
     },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA",
-        "Vega"
-      ]
-    },
     "is_active": {
       "type": "boolean",
       "required": true
@@ -43,17 +35,23 @@
       "type": "datetime",
       "required": true
     },
-    "clusters": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::cluster.cluster",
-      "mappedBy": "city"
-    },
     "holidays": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::holiday.holiday",
       "mappedBy": "city"
+    },
+    "areas": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::area.area",
+      "mappedBy": "city"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "cities"
     }
   }
 }

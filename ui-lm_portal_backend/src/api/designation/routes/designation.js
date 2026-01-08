@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * cluster router
+ * designation router
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::cluster.cluster');
+module.exports = createCoreRouter('api::designation.designation');

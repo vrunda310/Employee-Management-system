@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "clusters",
+  "collectionName": "areas",
   "info": {
-    "singularName": "cluster",
-    "pluralName": "clusters",
-    "displayName": "Cluster"
+    "singularName": "area",
+    "pluralName": "areas",
+    "displayName": "Area"
   },
   "options": {
     "draftAndPublish": true
@@ -18,23 +18,15 @@
     "description": {
       "type": "text"
     },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA ",
-        "Vega"
-      ]
-    },
     "is_active": {
       "type": "boolean",
       "required": true
     },
-    "cluster_created_at": {
+    "area_created_at": {
       "type": "datetime",
       "required": true
     },
-    "cluster_updated_at": {
+    "area_updated_at": {
       "type": "datetime",
       "required": true
     },
@@ -42,25 +34,31 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::city.city",
-      "inversedBy": "clusters"
+      "inversedBy": "areas"
     },
     "unit_locations": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::unit-location.unit-location",
-      "mappedBy": "cluster"
+      "mappedBy": "area"
     },
     "holidays": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::holiday.holiday",
-      "mappedBy": "cluster"
+      "mappedBy": "area"
     },
     "routes": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::route.route",
-      "mappedBy": "cluster"
+      "mappedBy": "area"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "areas"
     }
   }
 }

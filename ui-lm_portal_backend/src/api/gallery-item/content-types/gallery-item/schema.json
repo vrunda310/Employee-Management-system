@@ -37,14 +37,6 @@
         "Video"
       ]
     },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA",
-        "Vega"
-      ]
-    },
     "is_active": {
       "type": "boolean",
       "required": true
@@ -56,6 +48,12 @@
     "media_updated_at": {
       "type": "datetime",
       "required": true
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "gallery_items"
     }
   }
 }

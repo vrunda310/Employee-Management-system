@@ -34,14 +34,6 @@
       "type": "datetime",
       "required": true
     },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA",
-        "Vega"
-      ]
-    },
     "is_active": {
       "type": "boolean",
       "required": true
@@ -62,6 +54,12 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::news-category.news-category",
+      "inversedBy": "news"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
       "inversedBy": "news"
     }
   }

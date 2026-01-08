@@ -75,10 +75,6 @@
       "type": "string",
       "required": true
     },
-    "department": {
-      "type": "string",
-      "required": true
-    },
     "user_role": {
       "type": "enumeration",
       "required": true,
@@ -87,14 +83,6 @@
         "HR",
         "L&D_Team",
         "Employee"
-      ]
-    },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA",
-        "Vega"
       ]
     },
     "auth_method": {
@@ -170,10 +158,6 @@
       "type": "date",
       "required": true
     },
-    "designation": {
-      "type": "string",
-      "required": true
-    },
     "events": {
       "type": "relation",
       "relation": "oneToMany",
@@ -184,6 +168,30 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::unit-location.unit-location",
+      "inversedBy": "users"
+    },
+    "announcements": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::announcement.announcement",
+      "mappedBy": "announcement_created_by"
+    },
+    "department": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::department.department",
+      "inversedBy": "users"
+    },
+    "designation": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::designation.designation",
+      "inversedBy": "users"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
       "inversedBy": "users"
     }
   }

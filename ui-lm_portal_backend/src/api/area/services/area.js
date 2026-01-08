@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * cluster service
+ * area service
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
 
-module.exports = createCoreService('api::cluster.cluster');
+module.exports = createCoreService('api::area.area');

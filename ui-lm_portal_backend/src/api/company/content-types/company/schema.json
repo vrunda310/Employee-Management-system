@@ -1,0 +1,165 @@
+{
+  "kind": "collectionType",
+  "collectionName": "companies",
+  "info": {
+    "singularName": "company",
+    "pluralName": "companies",
+    "displayName": "Company"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "company_overview": {
+      "type": "text"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "website": {
+      "type": "string",
+      "required": true
+    },
+    "company_mail": {
+      "type": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text",
+      "required": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
+    },
+    "company_created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "company_updated_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "company_type": {
+      "type": "string",
+      "required": true
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "company"
+    },
+    "departments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::department.department",
+      "mappedBy": "company"
+    },
+    "designations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::designation.designation",
+      "mappedBy": "company"
+    },
+    "events": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::event.event",
+      "mappedBy": "company"
+    },
+    "unit_locations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::unit-location.unit-location",
+      "mappedBy": "company"
+    },
+    "announcements": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::announcement.announcement",
+      "mappedBy": "company"
+    },
+    "holidays": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::holiday.holiday",
+      "mappedBy": "company"
+    },
+    "news": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::news.news",
+      "mappedBy": "company"
+    },
+    "areas": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::area.area",
+      "mappedBy": "company"
+    },
+    "cities": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::city.city",
+      "mappedBy": "company"
+    },
+    "company_policies": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::company-policy.company-policy",
+      "mappedBy": "company"
+    },
+    "important_links": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::important-link.important-link",
+      "mappedBy": "company"
+    },
+    "form_templates": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::form-template.form-template",
+      "mappedBy": "company"
+    },
+    "gallery_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::gallery-item.gallery-item",
+      "mappedBy": "company"
+    },
+    "news_categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::news-category.news-category",
+      "mappedBy": "company"
+    },
+    "routes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::route.route",
+      "mappedBy": "company"
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course.course",
+      "mappedBy": "company"
+    }
+  }
+}

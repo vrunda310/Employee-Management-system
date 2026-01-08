@@ -116,6 +116,12 @@
       "relation": "manyToMany",
       "target": "api::course.course",
       "mappedBy": "courses"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "courses"
     }
   }
 }

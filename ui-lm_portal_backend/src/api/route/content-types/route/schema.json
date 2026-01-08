@@ -41,14 +41,6 @@
       "type": "json",
       "required": true
     },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA",
-        "Vega"
-      ]
-    },
     "is_active": {
       "type": "boolean",
       "required": true
@@ -61,16 +53,22 @@
       "type": "datetime",
       "required": true
     },
-    "cluster": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::cluster.cluster",
-      "inversedBy": "routes"
-    },
     "unit_location": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::unit-location.unit-location",
+      "inversedBy": "routes"
+    },
+    "area": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::area.area",
+      "inversedBy": "routes"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
       "inversedBy": "routes"
     }
   }

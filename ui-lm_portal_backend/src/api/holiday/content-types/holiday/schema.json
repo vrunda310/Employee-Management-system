@@ -50,30 +50,34 @@
       "type": "text",
       "required": true
     },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA",
-        "Vega"
-      ]
-    },
     "city": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::city.city",
       "inversedBy": "holidays"
     },
-    "cluster": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::cluster.cluster",
-      "inversedBy": "holidays"
-    },
     "unit_location": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::unit-location.unit-location",
+      "inversedBy": "holidays"
+    },
+    "departments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::department.department",
+      "mappedBy": "holidays"
+    },
+    "area": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::area.area",
+      "inversedBy": "holidays"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
       "inversedBy": "holidays"
     }
   }

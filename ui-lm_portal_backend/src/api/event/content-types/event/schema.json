@@ -51,14 +51,6 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "events"
     },
-    "company": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "AIA",
-        "Vega"
-      ]
-    },
     "is_active": {
       "type": "boolean",
       "required": true
@@ -75,6 +67,18 @@
     "event_updated_at": {
       "type": "datetime",
       "required": true
+    },
+    "departments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::department.department",
+      "mappedBy": "events"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "events"
     }
   }
 }

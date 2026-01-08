@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * cluster controller
+ * area controller
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-module.exports = createCoreController('api::cluster.cluster');
+module.exports = createCoreController('api::area.area');
