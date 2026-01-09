@@ -36,11 +36,11 @@
       "target": "api::city.city",
       "inversedBy": "areas"
     },
-    "unit_locations": {
+    "company": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::unit-location.unit-location",
-      "mappedBy": "area"
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "areas"
     },
     "holidays": {
       "type": "relation",
@@ -48,17 +48,17 @@
       "target": "api::holiday.holiday",
       "mappedBy": "area"
     },
+    "unit_locations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::unit-location.unit-location",
+      "mappedBy": "area"
+    },
     "routes": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::route.route",
       "mappedBy": "area"
-    },
-    "company": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "areas"
     }
   }
 }

@@ -58,6 +58,18 @@
       "type": "datetime",
       "required": true
     },
+    "area": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::area.area",
+      "inversedBy": "unit_locations"
+    },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "unit_locations"
+    },
     "holidays": {
       "type": "relation",
       "relation": "oneToMany",
@@ -87,18 +99,6 @@
       "relation": "manyToMany",
       "target": "api::department.department",
       "mappedBy": "unit_locations"
-    },
-    "area": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::area.area",
-      "inversedBy": "unit_locations"
-    },
-    "company": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "unit_locations"
     }
   }
 }

@@ -1157,6 +1157,10 @@ export interface ApiHolidayHoliday extends Struct.CollectionTypeSchema {
       'api::department.department'
     >;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
+    holiday_applied_at: Schema.Attribute.Enumeration<
+      ['All', 'Unit_location', 'Area', 'City', 'Department', 'Company']
+    > &
+      Schema.Attribute.Required;
     holiday_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     holiday_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &

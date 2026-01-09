@@ -64,17 +64,17 @@
       "target": "api::event.event",
       "inversedBy": "departments"
     },
-    "holidays": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::holiday.holiday",
-      "inversedBy": "departments"
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::company.company",
       "inversedBy": "departments"
+    },
+    "holidays": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::holiday.holiday",
+      "mappedBy": "departments"
     }
   }
 }

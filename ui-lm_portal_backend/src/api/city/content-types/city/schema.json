@@ -35,6 +35,12 @@
       "type": "datetime",
       "required": true
     },
+    "company": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::company.company",
+      "inversedBy": "cities"
+    },
     "holidays": {
       "type": "relation",
       "relation": "oneToMany",
@@ -46,12 +52,6 @@
       "relation": "oneToMany",
       "target": "api::area.area",
       "mappedBy": "city"
-    },
-    "company": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "cities"
     }
   }
 }

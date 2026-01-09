@@ -54,31 +54,93 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::city.city",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "holiday_applied_at"
+            },
+            "City"
+          ]
+        }
+      },
       "inversedBy": "holidays"
     },
     "unit_location": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::unit-location.unit-location",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "holiday_applied_at"
+            },
+            "Unit_location"
+          ]
+        }
+      },
       "inversedBy": "holidays"
-    },
-    "departments": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::department.department",
-      "mappedBy": "holidays"
     },
     "area": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::area.area",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "holiday_applied_at"
+            },
+            "Area"
+          ]
+        }
+      },
       "inversedBy": "holidays"
     },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::company.company",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "holiday_applied_at"
+            },
+            "Company"
+          ]
+        }
+      },
       "inversedBy": "holidays"
+    },
+    "departments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::department.department",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "holiday_applied_at"
+            },
+            "Department"
+          ]
+        }
+      },
+      "inversedBy": "holidays"
+    },
+    "holiday_applied_at": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "All",
+        "Unit_location",
+        "Area",
+        "City",
+        "Department",
+        "Company"
+      ]
     }
   }
 }
