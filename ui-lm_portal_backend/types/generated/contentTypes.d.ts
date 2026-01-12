@@ -1992,10 +1992,6 @@ export interface PluginUsersPermissionsUser
     company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    course_creators: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::course.course'
-    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

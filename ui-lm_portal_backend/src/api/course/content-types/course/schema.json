@@ -72,8 +72,7 @@
     "course_created_by": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "course_creators"
+      "target": "plugin::users-permissions.user"
     },
     "course_category": {
       "type": "relation",
