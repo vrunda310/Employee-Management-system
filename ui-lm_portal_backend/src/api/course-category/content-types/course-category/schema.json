@@ -52,17 +52,10 @@
       "type": "datetime",
       "required": true
     },
-    "course_categories": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::course-category.course-category",
-      "mappedBy": "parent_category"
-    },
     "parent_category": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::course-category.course-category",
-      "inversedBy": "course_categories"
+      "target": "api::course-category.course-category"
     }
   }
 }

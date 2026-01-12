@@ -75,16 +75,6 @@
       "type": "string",
       "required": true
     },
-    "user_role": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "Admin",
-        "HR",
-        "L&D_Team",
-        "Employee"
-      ]
-    },
     "auth_method": {
       "type": "enumeration",
       "required": true,

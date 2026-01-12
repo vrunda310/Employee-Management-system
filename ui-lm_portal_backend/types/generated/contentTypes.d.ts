@@ -695,10 +695,6 @@ export interface ApiCourseCategoryCourseCategory
   attributes: {
     category_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     category_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    course_categories: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::course-category.course-category'
-    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -810,7 +806,6 @@ export interface ApiCourseCourse extends Struct.CollectionTypeSchema {
       'plugin::users-permissions.user'
     >;
     course_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    courses: Schema.Attribute.Relation<'manyToMany', 'api::course.course'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -864,10 +859,6 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
     department_updated_at: Schema.Attribute.DateTime &
       Schema.Attribute.Required;
     description: Schema.Attribute.Text;
-    designations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::designation.designation'
-    >;
     is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -877,6 +868,10 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
+    unit_locations: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::unit-location.unit-location'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -940,8 +935,8 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    departments: Schema.Attribute.Relation<
-      'manyToMany',
+    department: Schema.Attribute.Relation<
+      'manyToOne',
       'api::department.department'
     >;
     description: Schema.Attribute.Text;
@@ -951,6 +946,8 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+    event_created_for: Schema.Attribute.Enumeration<['All', 'department']> &
+      Schema.Attribute.Required;
     event_location: Schema.Attribute.Text & Schema.Attribute.Required;
     event_owner: Schema.Attribute.String & Schema.Attribute.Required;
     event_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
@@ -1441,10 +1438,6 @@ export interface ApiUnitLocationUnitLocation
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    departments: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::department.department'
-    >;
     emergency_gate_images: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
@@ -2041,10 +2034,6 @@ export interface PluginUsersPermissionsUser
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    user_role: Schema.Attribute.Enumeration<
-      ['Admin', 'HR', 'L&D_Team', 'Employee']
-    > &
-      Schema.Attribute.Required;
     username: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &

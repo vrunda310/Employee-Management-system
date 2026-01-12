@@ -11,12 +11,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "designations": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::designation.designation",
-      "mappedBy": "department"
-    },
     "name": {
       "type": "string",
       "required": true
@@ -44,6 +38,11 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::company.company"
+    },
+    "unit_locations": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::unit-location.unit-location"
     }
   }
 }

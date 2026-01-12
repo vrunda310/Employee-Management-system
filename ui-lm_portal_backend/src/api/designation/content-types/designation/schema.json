@@ -18,8 +18,7 @@
     "department": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::department.department",
-      "inversedBy": "designations"
+      "target": "api::department.department"
     },
     "is_active": {
       "type": "boolean",

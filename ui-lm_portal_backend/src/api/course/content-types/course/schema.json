@@ -79,17 +79,10 @@
       "relation": "manyToOne",
       "target": "api::course-category.course-category"
     },
-    "courses": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::course.course",
-      "inversedBy": "prerequisite_courses"
-    },
     "prerequisite_courses": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::course.course",
-      "mappedBy": "courses"
+      "target": "api::course.course"
     },
     "company": {
       "type": "relation",

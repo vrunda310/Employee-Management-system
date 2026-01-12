@@ -67,15 +67,33 @@
       "type": "datetime",
       "required": true
     },
-    "departments": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::department.department"
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::company.company"
+    },
+    "event_created_for": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "All",
+        "department"
+      ]
+    },
+    "department": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::department.department",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "event_created_for"
+            },
+            "department"
+          ]
+        }
+      }
     }
   }
 }

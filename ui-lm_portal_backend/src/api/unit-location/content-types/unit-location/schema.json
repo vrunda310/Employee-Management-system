@@ -68,11 +68,6 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::company.company"
-    },
-    "departments": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::department.department"
     }
   }
 }
