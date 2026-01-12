@@ -47,8 +47,7 @@
             "Department"
           ]
         }
-      },
-      "inversedBy": "announcements"
+      }
     },
     "unit_locations": {
       "type": "relation",
@@ -63,8 +62,7 @@
             "Location"
           ]
         }
-      },
-      "inversedBy": "announcements"
+      }
     },
     "designations": {
       "type": "relation",
@@ -79,8 +77,7 @@
             "Designation"
           ]
         }
-      },
-      "inversedBy": "announcements"
+      }
     },
     "is_important": {
       "type": "boolean",
@@ -116,8 +113,7 @@
     "announcement_created_by": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "announcements"
+      "target": "plugin::users-permissions.user"
     },
     "announcement_created_at": {
       "type": "datetime",
@@ -130,8 +126,7 @@
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "announcements"
+      "target": "api::company.company"
     }
   }
 }

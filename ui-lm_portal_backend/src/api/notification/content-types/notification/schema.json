@@ -54,8 +54,7 @@
     "user": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "notifications"
+      "target": "plugin::users-permissions.user"
     }
   }
 }

@@ -120,35 +120,11 @@
       "type": "datetime",
       "required": true
     },
-    "user_progresses": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::user-progress.user-progress",
-      "mappedBy": "user"
-    },
-    "courses": {
+    "course_creators": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::course.course",
-      "mappedBy": "user"
-    },
-    "course_assignments": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::course-assignment.course-assignment",
-      "mappedBy": "user"
-    },
-    "quiz_submissions": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::quiz-submission.quiz-submission",
-      "mappedBy": "user"
-    },
-    "notifications": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::notification.notification",
-      "mappedBy": "user"
+      "mappedBy": "course_created_by"
     },
     "joining_date": {
       "type": "date",
@@ -158,41 +134,25 @@
       "type": "date",
       "required": true
     },
-    "events": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::event.event",
-      "mappedBy": "event_created_by"
-    },
     "working_unit_location": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::unit-location.unit-location",
-      "inversedBy": "users"
-    },
-    "announcements": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::announcement.announcement",
-      "mappedBy": "announcement_created_by"
+      "target": "api::unit-location.unit-location"
     },
     "department": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::department.department",
-      "inversedBy": "users"
+      "target": "api::department.department"
     },
     "designation": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::designation.designation",
-      "inversedBy": "users"
+      "target": "api::designation.designation"
     },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "users"
+      "target": "api::company.company"
     }
   }
 }

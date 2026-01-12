@@ -63,8 +63,7 @@
             "City"
           ]
         }
-      },
-      "inversedBy": "holidays"
+      }
     },
     "unit_location": {
       "type": "relation",
@@ -79,8 +78,7 @@
             "Unit_location"
           ]
         }
-      },
-      "inversedBy": "holidays"
+      }
     },
     "area": {
       "type": "relation",
@@ -95,8 +93,7 @@
             "Area"
           ]
         }
-      },
-      "inversedBy": "holidays"
+      }
     },
     "company": {
       "type": "relation",
@@ -111,8 +108,7 @@
             "Company"
           ]
         }
-      },
-      "inversedBy": "holidays"
+      }
     },
     "departments": {
       "type": "relation",
@@ -127,8 +123,7 @@
             "Department"
           ]
         }
-      },
-      "inversedBy": "holidays"
+      }
     },
     "holiday_applied_at": {
       "type": "enumeration",

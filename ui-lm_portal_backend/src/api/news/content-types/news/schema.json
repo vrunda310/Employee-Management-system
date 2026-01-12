@@ -53,14 +53,12 @@
     "news_category": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::news-category.news-category",
-      "inversedBy": "news"
+      "target": "api::news-category.news-category"
     },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "news"
+      "target": "api::company.company"
     }
   }
 }

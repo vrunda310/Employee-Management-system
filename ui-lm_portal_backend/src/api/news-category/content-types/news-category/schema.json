@@ -30,17 +30,10 @@
       "type": "datetime",
       "required": true
     },
-    "news": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::news.news",
-      "mappedBy": "news_category"
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "news_categories"
+      "target": "api::company.company"
     }
   }
 }

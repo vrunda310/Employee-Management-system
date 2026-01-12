@@ -45,17 +45,15 @@
       "type": "datetime",
       "required": true
     },
-    "user": {
+    "assigned_by": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "course_assignments"
+      "target": "plugin::users-permissions.user"
     },
     "course": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::course.course",
-      "inversedBy": "course_assignments"
+      "target": "api::course.course"
     }
   }
 }

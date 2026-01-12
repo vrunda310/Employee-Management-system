@@ -38,20 +38,7 @@
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "cities"
-    },
-    "holidays": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::holiday.holiday",
-      "mappedBy": "city"
-    },
-    "areas": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::area.area",
-      "mappedBy": "city"
+      "target": "api::company.company"
     }
   }
 }

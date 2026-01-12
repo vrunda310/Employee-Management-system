@@ -52,8 +52,7 @@
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "gallery_items"
+      "target": "api::company.company"
     }
   }
 }

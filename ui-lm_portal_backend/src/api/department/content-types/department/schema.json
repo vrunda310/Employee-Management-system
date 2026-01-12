@@ -11,12 +11,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "announcements": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::announcement.announcement",
-      "mappedBy": "departments"
-    },
     "designations": {
       "type": "relation",
       "relation": "oneToMany",
@@ -46,35 +40,10 @@
       "type": "datetime",
       "required": true
     },
-    "unit_locations": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::unit-location.unit-location",
-      "inversedBy": "departments"
-    },
-    "users": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "plugin::users-permissions.user",
-      "mappedBy": "department"
-    },
-    "events": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::event.event",
-      "inversedBy": "departments"
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "departments"
-    },
-    "holidays": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::holiday.holiday",
-      "mappedBy": "departments"
+      "target": "api::company.company"
     }
   }
 }

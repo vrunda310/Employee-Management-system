@@ -44,8 +44,7 @@
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "form_templates"
+      "target": "api::company.company"
     }
   }
 }

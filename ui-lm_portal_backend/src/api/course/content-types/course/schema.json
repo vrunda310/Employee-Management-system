@@ -69,41 +69,16 @@
       "type": "datetime",
       "required": true
     },
-    "course_modules": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::course-module.course-module",
-      "mappedBy": "course"
-    },
-    "quizzes": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::quizze.quizze",
-      "mappedBy": "course"
-    },
-    "user_progresses": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::user-progress.user-progress",
-      "mappedBy": "course"
-    },
-    "user": {
+    "course_created_by": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "courses"
+      "inversedBy": "course_creators"
     },
     "course_category": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::course-category.course-category",
-      "inversedBy": "courses"
-    },
-    "course_assignments": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::course-assignment.course-assignment",
-      "mappedBy": "course"
+      "target": "api::course-category.course-category"
     },
     "courses": {
       "type": "relation",
@@ -120,8 +95,7 @@
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "courses"
+      "target": "api::company.company"
     }
   }
 }

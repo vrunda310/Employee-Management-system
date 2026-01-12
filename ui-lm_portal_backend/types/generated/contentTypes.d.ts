@@ -511,18 +511,12 @@ export interface ApiAreaArea extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
-    holidays: Schema.Attribute.Relation<'oneToMany', 'api::holiday.holiday'>;
     is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::area.area'> &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
-    unit_locations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::unit-location.unit-location'
-    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -540,7 +534,6 @@ export interface ApiCityCity extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    areas: Schema.Attribute.Relation<'oneToMany', 'api::area.area'>;
     city_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     city_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
@@ -548,7 +541,6 @@ export interface ApiCityCity extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    holidays: Schema.Attribute.Relation<'oneToMany', 'api::holiday.holiday'>;
     is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::city.city'> &
@@ -614,47 +606,14 @@ export interface ApiCompanyCompany extends Struct.CollectionTypeSchema {
   };
   attributes: {
     address: Schema.Attribute.Text & Schema.Attribute.Required;
-    announcements: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::announcement.announcement'
-    >;
-    areas: Schema.Attribute.Relation<'oneToMany', 'api::area.area'>;
-    cities: Schema.Attribute.Relation<'oneToMany', 'api::city.city'>;
     company_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     company_mail: Schema.Attribute.Email;
     company_overview: Schema.Attribute.Text;
-    company_policies: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::company-policy.company-policy'
-    >;
     company_type: Schema.Attribute.String & Schema.Attribute.Required;
     company_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    courses: Schema.Attribute.Relation<'oneToMany', 'api::course.course'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    departments: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::department.department'
-    >;
-    designations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::designation.designation'
-    >;
-    events: Schema.Attribute.Relation<'oneToMany', 'api::event.event'>;
-    form_templates: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::form-template.form-template'
-    >;
-    gallery_items: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::gallery-item.gallery-item'
-    >;
-    holidays: Schema.Attribute.Relation<'oneToMany', 'api::holiday.holiday'>;
-    important_links: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::important-link.important-link'
-    >;
     is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -666,25 +625,11 @@ export interface ApiCompanyCompany extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
-    news: Schema.Attribute.Relation<'oneToMany', 'api::news.news'>;
-    news_categories: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::news-category.news-category'
-    >;
     phone: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
-    unit_locations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::unit-location.unit-location'
-    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users: Schema.Attribute.Relation<
-      'oneToMany',
-      'plugin::users-permissions.user'
-    >;
     website: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
@@ -702,6 +647,10 @@ export interface ApiCourseAssignmentCourseAssignment
   };
   attributes: {
     assigned_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    assigned_by: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
     assignment_created_at: Schema.Attribute.DateTime &
       Schema.Attribute.Required;
     assignment_type: Schema.Attribute.Enumeration<
@@ -729,10 +678,6 @@ export interface ApiCourseAssignmentCourseAssignment
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    user: Schema.Attribute.Relation<
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
   };
 }
 
@@ -754,7 +699,6 @@ export interface ApiCourseCategoryCourseCategory
       'oneToMany',
       'api::course-category.course-category'
     >;
-    courses: Schema.Attribute.Relation<'oneToMany', 'api::course.course'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -856,18 +800,14 @@ export interface ApiCourseCourse extends Struct.CollectionTypeSchema {
       'images' | 'files' | 'videos' | 'audios'
     >;
     company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
-    course_assignments: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::course-assignment.course-assignment'
-    >;
     course_category: Schema.Attribute.Relation<
       'manyToOne',
       'api::course-category.course-category'
     >;
     course_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    course_modules: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::course-module.course-module'
+    course_created_by: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
     >;
     course_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     courses: Schema.Attribute.Relation<'manyToMany', 'api::course.course'>;
@@ -895,20 +835,11 @@ export interface ApiCourseCourse extends Struct.CollectionTypeSchema {
       'api::course.course'
     >;
     publishedAt: Schema.Attribute.DateTime;
-    quizzes: Schema.Attribute.Relation<'oneToMany', 'api::quizze.quizze'>;
     thumbnail: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    user: Schema.Attribute.Relation<
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    user_progresses: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::user-progress.user-progress'
-    >;
   };
 }
 
@@ -923,10 +854,6 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    announcements: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::announcement.announcement'
-    >;
     company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -941,8 +868,6 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::designation.designation'
     >;
-    events: Schema.Attribute.Relation<'manyToMany', 'api::event.event'>;
-    holidays: Schema.Attribute.Relation<'manyToMany', 'api::holiday.holiday'>;
     is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -952,17 +877,9 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    unit_locations: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::unit-location.unit-location'
-    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users: Schema.Attribute.Relation<
-      'oneToMany',
-      'plugin::users-permissions.user'
-    >;
   };
 }
 
@@ -977,10 +894,6 @@ export interface ApiDesignationDesignation extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    announcements: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::announcement.announcement'
-    >;
     company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1005,10 +918,6 @@ export interface ApiDesignationDesignation extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users: Schema.Attribute.Relation<
-      'oneToMany',
-      'plugin::users-permissions.user'
-    >;
   };
 }
 
@@ -1247,7 +1156,6 @@ export interface ApiNewsCategoryNewsCategory
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    news: Schema.Attribute.Relation<'oneToMany', 'api::news.news'>;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1420,14 +1328,14 @@ export interface ApiQuizSubmissionQuizSubmission
     record_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     score: Schema.Attribute.Integer & Schema.Attribute.Required;
     submitted_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    submitted_by: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
     time_taken_minutes: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    user: Schema.Attribute.Relation<
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
   };
 }
 
@@ -1462,14 +1370,6 @@ export interface ApiQuizzeQuizze extends Struct.CollectionTypeSchema {
     max_attempts: Schema.Attribute.Integer & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     quiz_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    quiz_questions: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::quiz-question.quiz-question'
-    >;
-    quiz_submissions: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::quiz-submission.quiz-submission'
-    >;
     quiz_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     time_limit_minutes: Schema.Attribute.Integer;
     title: Schema.Attribute.String & Schema.Attribute.Required;
@@ -1535,10 +1435,6 @@ export interface ApiUnitLocationUnitLocation
   attributes: {
     address: Schema.Attribute.Text & Schema.Attribute.Required;
     alternative_contact: Schema.Attribute.String;
-    announcements: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::announcement.announcement'
-    >;
     area: Schema.Attribute.Relation<'manyToOne', 'api::area.area'>;
     company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     contact: Schema.Attribute.String & Schema.Attribute.Required;
@@ -1553,7 +1449,6 @@ export interface ApiUnitLocationUnitLocation
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
-    holidays: Schema.Attribute.Relation<'oneToMany', 'api::holiday.holiday'>;
     is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -1568,14 +1463,9 @@ export interface ApiUnitLocationUnitLocation
     >;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users: Schema.Attribute.Relation<
-      'oneToMany',
-      'plugin::users-permissions.user'
-    >;
   };
 }
 
@@ -2093,10 +1983,6 @@ export interface PluginUsersPermissionsUser
   attributes: {
     account_created_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     account_updated_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    announcements: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::announcement.announcement'
-    >;
     auth_method: Schema.Attribute.Enumeration<
       ['Google_SSO', 'Azure_AD', 'Employee_Id']
     > &
@@ -2106,11 +1992,10 @@ export interface PluginUsersPermissionsUser
     company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    course_assignments: Schema.Attribute.Relation<
+    course_creators: Schema.Attribute.Relation<
       'oneToMany',
-      'api::course-assignment.course-assignment'
+      'api::course.course'
     >;
-    courses: Schema.Attribute.Relation<'oneToMany', 'api::course.course'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -2130,7 +2015,6 @@ export interface PluginUsersPermissionsUser
     employee_id: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
-    events: Schema.Attribute.Relation<'oneToMany', 'api::event.event'>;
     full_name: Schema.Attribute.String & Schema.Attribute.Required;
     is_active: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
@@ -2143,10 +2027,6 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
-    notifications: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::notification.notification'
-    >;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -2157,10 +2037,6 @@ export interface PluginUsersPermissionsUser
     >;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    quiz_submissions: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::quiz-submission.quiz-submission'
-    >;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
     role: Schema.Attribute.Relation<
       'manyToOne',
@@ -2169,10 +2045,6 @@ export interface PluginUsersPermissionsUser
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    user_progresses: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::user-progress.user-progress'
-    >;
     user_role: Schema.Attribute.Enumeration<
       ['Admin', 'HR', 'L&D_Team', 'Employee']
     > &

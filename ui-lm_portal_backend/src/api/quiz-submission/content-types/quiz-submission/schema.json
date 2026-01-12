@@ -38,17 +38,15 @@
       "type": "datetime",
       "required": true
     },
-    "user": {
+    "submitted_by": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "quiz_submissions"
+      "target": "plugin::users-permissions.user"
     },
     "quiz": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::quizze.quizze",
-      "inversedBy": "quiz_submissions"
+      "target": "api::quizze.quizze"
     }
   }
 }

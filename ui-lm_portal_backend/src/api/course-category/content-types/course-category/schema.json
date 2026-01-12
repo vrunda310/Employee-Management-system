@@ -52,12 +52,6 @@
       "type": "datetime",
       "required": true
     },
-    "courses": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::course.course",
-      "mappedBy": "course_category"
-    },
     "course_categories": {
       "type": "relation",
       "relation": "oneToMany",

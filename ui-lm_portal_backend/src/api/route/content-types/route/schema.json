@@ -56,20 +56,18 @@
     "unit_location": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::unit-location.unit-location",
-      "inversedBy": "routes"
+      "target": "api::unit-location.unit-location"
     },
     "area": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::area.area",
-      "inversedBy": "routes"
+      "target": "api::area.area"
+      
     },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "routes"
+      "target": "api::company.company"
     }
   }
 }

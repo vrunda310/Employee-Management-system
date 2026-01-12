@@ -63,14 +63,12 @@
     "course": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::course.course",
-      "inversedBy": "user_progresses"
+      "target": "api::course.course"
     },
     "user": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "user_progresses"
+      "target": "plugin::users-permissions.user"
     }
   }
 }

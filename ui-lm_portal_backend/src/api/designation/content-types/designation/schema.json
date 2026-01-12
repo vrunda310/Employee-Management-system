@@ -11,12 +11,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "announcements": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::announcement.announcement",
-      "mappedBy": "designations"
-    },
     "title": {
       "type": "string",
       "required": true
@@ -39,17 +33,10 @@
       "type": "datetime",
       "required": true
     },
-    "users": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "plugin::users-permissions.user",
-      "mappedBy": "designation"
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "designations"
+      "target": "api::company.company"
     }
   }
 }

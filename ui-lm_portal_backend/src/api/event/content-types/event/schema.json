@@ -48,8 +48,7 @@
     "event_created_by": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "events"
+      "target": "plugin::users-permissions.user"
     },
     "is_active": {
       "type": "boolean",
@@ -71,14 +70,12 @@
     "departments": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::department.department",
-      "mappedBy": "events"
+      "target": "api::department.department"
     },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "events"
+      "target": "api::company.company"
     }
   }
 }

@@ -46,20 +46,7 @@
     "course": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::course.course",
-      "inversedBy": "quizzes"
-    },
-    "quiz_questions": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::quiz-question.quiz-question",
-      "mappedBy": "quiz"
-    },
-    "quiz_submissions": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::quiz-submission.quiz-submission",
-      "mappedBy": "quiz"
+      "target": "api::course.course"
     }
   }
 }

@@ -61,44 +61,18 @@
     "area": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::area.area",
-      "inversedBy": "unit_locations"
+      "target": "api::area.area"
+     
     },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "unit_locations"
-    },
-    "holidays": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::holiday.holiday",
-      "mappedBy": "unit_location"
-    },
-    "routes": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::route.route",
-      "mappedBy": "unit_location"
-    },
-    "users": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "plugin::users-permissions.user",
-      "mappedBy": "working_unit_location"
-    },
-    "announcements": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::announcement.announcement",
-      "mappedBy": "unit_locations"
+      "target": "api::company.company"
     },
     "departments": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::department.department",
-      "mappedBy": "unit_locations"
+      "target": "api::department.department"
     }
   }
 }

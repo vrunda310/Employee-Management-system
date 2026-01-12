@@ -48,8 +48,7 @@
     "company": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::company.company",
-      "inversedBy": "company_policies"
+      "target": "api::company.company"
     }
   }
 }

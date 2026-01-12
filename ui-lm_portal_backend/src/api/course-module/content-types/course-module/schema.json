@@ -18,8 +18,7 @@
     "course": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::course.course",
-      "inversedBy": "course_modules"
+      "target": "api::course.course"
     },
     "description": {
       "type": "blocks"
