@@ -653,17 +653,19 @@ export interface ApiCourseAssignmentCourseAssignment
     >;
     assignment_created_at: Schema.Attribute.DateTime &
       Schema.Attribute.Required;
-    assignment_type: Schema.Attribute.Enumeration<
+    assignment_target_type: Schema.Attribute.Enumeration<
       ['Department', 'Location', 'Role', 'Individual']
     > &
       Schema.Attribute.Required;
+    assignment_target_value: Schema.Attribute.String &
+      Schema.Attribute.Required;
     assignment_updated_at: Schema.Attribute.DateTime &
       Schema.Attribute.Required;
+    completion_date: Schema.Attribute.Date;
     course: Schema.Attribute.Relation<'manyToOne', 'api::course.course'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    due_date: Schema.Attribute.Date;
     is_active: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
@@ -674,7 +676,6 @@ export interface ApiCourseAssignmentCourseAssignment
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    target_value: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -698,7 +699,7 @@ export interface ApiCourseCategoryCourseCategory
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Blocks;
+    description: Schema.Attribute.Text;
     display_order: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<0>;
@@ -741,12 +742,12 @@ export interface ApiCourseModuleCourseModule
     draftAndPublish: true;
   };
   attributes: {
-    content_url: Schema.Attribute.String;
+    content_url: Schema.Attribute.String & Schema.Attribute.Required;
     course: Schema.Attribute.Relation<'manyToOne', 'api::course.course'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Blocks;
+    description: Schema.Attribute.Text;
     duration_minutes: Schema.Attribute.Integer & Schema.Attribute.Required;
     is_mandatory: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
@@ -767,9 +768,10 @@ export interface ApiCourseModuleCourseModule
     pdf_file: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
-    >;
+    > &
+      Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    text_content: Schema.Attribute.Blocks;
+    text_content: Schema.Attribute.Blocks & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -777,7 +779,8 @@ export interface ApiCourseModuleCourseModule
     video_file: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
-    >;
+    > &
+      Schema.Attribute.Required;
   };
 }
 

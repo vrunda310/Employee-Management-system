@@ -20,9 +20,6 @@
       "relation": "manyToOne",
       "target": "api::course.course"
     },
-    "description": {
-      "type": "blocks"
-    },
     "order": {
       "type": "integer",
       "required": true
@@ -49,7 +46,8 @@
             "External_link"
           ]
         }
-      }
+      },
+      "required": true
     },
     "video_file": {
       "type": "media",
@@ -64,6 +62,7 @@
         }
       },
       "multiple": true,
+      "required": true,
       "allowedTypes": [
         "images",
         "files",
@@ -84,6 +83,7 @@
         }
       },
       "multiple": true,
+      "required": true,
       "allowedTypes": [
         "images",
         "files",
@@ -102,7 +102,8 @@
             "Text"
           ]
         }
-      }
+      },
+      "required": true
     },
     "module_created_at": {
       "type": "datetime",
@@ -120,6 +121,9 @@
     "duration_minutes": {
       "type": "integer",
       "required": true
+    },
+    "description": {
+      "type": "text"
     }
   }
 }

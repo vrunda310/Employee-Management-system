@@ -16,9 +16,6 @@
       "required": true,
       "unique": true
     },
-    "description": {
-      "type": "blocks"
-    },
     "icon": {
       "type": "media",
       "multiple": false,
@@ -56,6 +53,9 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::course-category.course-category"
+    },
+    "description": {
+      "type": "text"
     }
   }
 }
