@@ -66,62 +66,25 @@
       "inversedBy": "users",
       "configurable": false
     },
+    "employee_name": {
+      "type": "string",
+      "required": true
+    },
     "employee_id": {
       "type": "string",
-      "required": true,
-      "unique": true
-    },
-    "full_name": {
-      "type": "string",
-      "required": true
-    },
-    "auth_method": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "Google_SSO",
-        "Azure_AD",
-        "Employee_Id"
-      ]
-    },
-    "is_active": {
-      "type": "boolean",
-      "required": true,
-      "default": true
-    },
-    "profile_picture": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
-    "last_login": {
-      "type": "datetime"
-    },
-    "account_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "account_updated_at": {
-      "type": "datetime",
       "required": true
     },
     "joining_date": {
       "type": "date",
       "required": true
     },
-    "birthday_date": {
+    "date_of_birth": {
       "type": "date",
       "required": true
     },
-    "working_unit_location": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::unit-location.unit-location"
+    "contact_no": {
+      "type": "string",
+      "required": true
     },
     "department": {
       "type": "relation",
@@ -134,9 +97,121 @@
       "target": "api::designation.designation"
     },
     "company": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::company.company"
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "AIA",
+        "Vega"
+      ]
+    },
+    "branch": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "company"
+            },
+            "AIA"
+          ]
+        }
+      },
+      "required": true
+    },
+    "photograph": {
+      "type": "media",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "company"
+            },
+            "AIA"
+          ]
+        }
+      },
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "age": {
+      "type": "integer",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "company"
+            },
+            "Vega"
+          ]
+        }
+      },
+      "required": true
+    },
+    "working_location": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "company"
+            },
+            "Vega"
+          ]
+        }
+      },
+      "required": true
+    },
+    "exit_date": {
+      "type": "date",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "company"
+            },
+            "AIA"
+          ]
+        }
+      },
+      "required": true
+    },
+    "employment_type": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "company"
+            },
+            "Vega"
+          ]
+        }
+      },
+      "required": true
+    },
+    "ext": {
+      "type": "integer",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "company"
+            },
+            "AIA"
+          ]
+        }
+      },
+      "required": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true
     }
   }
 }

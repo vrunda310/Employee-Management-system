@@ -30,14 +30,6 @@
         "audios"
       ]
     },
-    "holiday_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "holiday_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "is_active": {
       "type": "boolean",
       "required": true

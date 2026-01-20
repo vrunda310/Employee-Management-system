@@ -37,14 +37,6 @@
       "type": "boolean",
       "required": true
     },
-    "policy_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "policy_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",

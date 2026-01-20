@@ -52,14 +52,6 @@
     "certificate_url": {
       "type": "string"
     },
-    "progress_record_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "progress_record_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "course": {
       "type": "relation",
       "relation": "manyToOne",

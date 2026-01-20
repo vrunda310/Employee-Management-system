@@ -45,14 +45,6 @@
       "type": "boolean",
       "required": true
     },
-    "route_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "route_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "unit_location": {
       "type": "relation",
       "relation": "manyToOne",
@@ -62,7 +54,6 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::area.area"
-      
     },
     "company": {
       "type": "relation",

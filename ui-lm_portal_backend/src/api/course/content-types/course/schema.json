@@ -61,14 +61,6 @@
         "audios"
       ]
     },
-    "course_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "course_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "course_created_by": {
       "type": "relation",
       "relation": "manyToOne",

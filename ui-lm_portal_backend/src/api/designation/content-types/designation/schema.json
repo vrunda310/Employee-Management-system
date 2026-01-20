@@ -24,14 +24,6 @@
       "type": "boolean",
       "required": true
     },
-    "designation_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "designation_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",

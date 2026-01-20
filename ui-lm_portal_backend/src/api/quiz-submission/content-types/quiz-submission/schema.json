@@ -30,14 +30,6 @@
       "type": "integer",
       "required": true
     },
-    "submitted_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "record_created_at": {
-      "type": "datetime",
-      "required": true
-    },
     "submitted_by": {
       "type": "relation",
       "relation": "manyToOne",

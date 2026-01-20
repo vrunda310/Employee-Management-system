@@ -43,14 +43,6 @@
       "required": true,
       "default": false
     },
-    "notification_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "notification_read_at": {
-      "type": "datetime",
-      "required": false
-    },
     "user": {
       "type": "relation",
       "relation": "manyToOne",

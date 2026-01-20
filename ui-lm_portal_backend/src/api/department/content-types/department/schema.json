@@ -26,14 +26,6 @@
       "type": "boolean",
       "required": true
     },
-    "department_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "department_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",

@@ -47,14 +47,6 @@
       "type": "boolean",
       "required": true
     },
-    "company_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "company_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company_type": {
       "type": "string",
       "required": true

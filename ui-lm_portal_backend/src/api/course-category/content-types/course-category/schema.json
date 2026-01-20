@@ -41,14 +41,6 @@
       "required": true,
       "default": true
     },
-    "category_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "category_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "parent_category": {
       "type": "relation",
       "relation": "manyToOne",

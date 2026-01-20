@@ -50,19 +50,10 @@
       "type": "boolean",
       "required": true
     },
-    "location_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "location_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "area": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::area.area"
-     
     },
     "company": {
       "type": "relation",

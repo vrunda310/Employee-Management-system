@@ -33,14 +33,6 @@
       "type": "boolean",
       "required": true
     },
-    "form_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "form_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",

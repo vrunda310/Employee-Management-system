@@ -42,14 +42,6 @@
       "type": "boolean",
       "required": true
     },
-    "news_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "news_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "news_category": {
       "type": "relation",
       "relation": "manyToOne",

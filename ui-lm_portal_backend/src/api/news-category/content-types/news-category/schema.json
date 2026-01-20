@@ -22,14 +22,6 @@
       "type": "boolean",
       "required": true
     },
-    "category_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "category_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",

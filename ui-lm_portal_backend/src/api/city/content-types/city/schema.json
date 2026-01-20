@@ -27,14 +27,6 @@
       "type": "boolean",
       "required": true
     },
-    "city_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "city_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",

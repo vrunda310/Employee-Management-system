@@ -41,14 +41,6 @@
       "type": "boolean",
       "required": true
     },
-    "media_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "media_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",

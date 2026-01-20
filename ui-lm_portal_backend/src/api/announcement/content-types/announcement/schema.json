@@ -115,14 +115,6 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user"
     },
-    "announcement_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "announcement_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",

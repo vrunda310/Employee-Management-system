@@ -35,14 +35,6 @@
       "required": true,
       "default": true
     },
-    "quiz_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "quiz_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "course": {
       "type": "relation",
       "relation": "manyToOne",

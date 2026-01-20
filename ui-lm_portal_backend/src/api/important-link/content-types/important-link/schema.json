@@ -28,14 +28,6 @@
       "type": "boolean",
       "required": true
     },
-    "link_created_at": {
-      "type": "datetime",
-      "required": true
-    },
-    "link_updated_at": {
-      "type": "datetime",
-      "required": true
-    },
     "company": {
       "type": "relation",
       "relation": "manyToOne",
