@@ -39,6 +39,70 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::course.course"
+    },
+    "departments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::department.department",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "assignment_target_type"
+            },
+            "Department"
+          ]
+        }
+      }
+    },
+    "individual_user": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "assignment_target_type"
+            },
+            "Individual"
+          ]
+        }
+      }
+    },
+    "unit_locations": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::unit-location.unit-location",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "assignment_target_type"
+            },
+            "Location"
+          ]
+        }
+      }
+    },
+    "role": {
+      "type": "enumeration",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "assignment_target_type"
+            },
+            "Role"
+          ]
+        }
+      },
+      "required": true,
+      "enum": [
+        "Hr",
+        "LearningManager",
+        "Employee"
+      ]
     }
   }
 }

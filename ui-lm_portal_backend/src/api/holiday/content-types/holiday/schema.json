@@ -117,7 +117,7 @@
         }
       }
     },
-    "holiday_applied_at": {
+    "holiday_for": {
       "type": "enumeration",
       "required": true,
       "enum": [

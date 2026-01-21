@@ -1,5 +1,16 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface QuizOptions extends Struct.ComponentSchema {
+  collectionName: 'components_quiz_options';
+  info: {
+    displayName: 'options';
+  };
+  attributes: {
+    option_key: Schema.Attribute.String & Schema.Attribute.Required;
+    option_label: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedMedia extends Struct.ComponentSchema {
   collectionName: 'components_shared_media';
   info: {
@@ -65,6 +76,7 @@ export interface SharedSlider extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'quiz.options': QuizOptions;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;
       'shared.rich-text': SharedRichText;

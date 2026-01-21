@@ -18,14 +18,15 @@
     "instructions": {
       "type": "text"
     },
-    "time_limit_minutes": {
-      "type": "integer"
+    "completion_time": {
+      "type": "integer",
+      "required": true
     },
     "max_attempts": {
       "type": "integer",
       "required": true
     },
-    "cooldown_hours": {
+    "reattempt_after": {
       "type": "integer",
       "required": true,
       "default": 24

@@ -30,24 +30,9 @@
       "enum": [
         "Video",
         "Pdf",
-        "Scrom",
-        "Text",
-        "External_link"
+        "Scorm",
+        "Text"
       ]
-    },
-    "content_url": {
-      "type": "string",
-      "conditions": {
-        "visible": {
-          "==": [
-            {
-              "var": "module_content_type"
-            },
-            "External_link"
-          ]
-        }
-      },
-      "required": true
     },
     "video_file": {
       "type": "media",
@@ -104,11 +89,6 @@
         }
       },
       "required": true
-    },
-    "is_mandatory": {
-      "type": "boolean",
-      "required": true,
-      "default": true
     },
     "duration_minutes": {
       "type": "integer",

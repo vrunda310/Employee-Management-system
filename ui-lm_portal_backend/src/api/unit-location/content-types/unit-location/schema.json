@@ -59,6 +59,14 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::company.company"
+    },
+    "is_office_location": {
+      "type": "boolean",
+      "required": true
+    },
+    "is_factory_location": {
+      "type": "boolean",
+      "required": true
     }
   }
 }

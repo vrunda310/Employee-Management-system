@@ -26,16 +26,6 @@
         "audios"
       ]
     },
-    "slug": {
-      "type": "string",
-      "required": true,
-      "unique": true
-    },
-    "display_order": {
-      "type": "integer",
-      "required": true,
-      "default": 0
-    },
     "is_active": {
       "type": "boolean",
       "required": true,

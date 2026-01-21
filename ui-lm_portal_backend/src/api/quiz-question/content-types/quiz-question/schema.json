@@ -24,13 +24,6 @@
         "Multiple_select"
       ]
     },
-    "options": {
-      "type": "json",
-      "required": true
-    },
-    "explaination": {
-      "type": "text"
-    },
     "order": {
       "type": "integer",
       "required": true
@@ -44,6 +37,12 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::quizze.quizze"
+    },
+    "options": {
+      "type": "component",
+      "component": "quiz.options",
+      "repeatable": true,
+      "required": true
     }
   }
 }

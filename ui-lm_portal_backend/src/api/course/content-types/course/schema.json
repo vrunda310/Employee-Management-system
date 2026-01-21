@@ -80,6 +80,18 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::company.company"
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "required": true
+    },
+    "is_orientation_course": {
+      "type": "boolean",
+      "required": true
+    },
+    "is_optional": {
+      "type": "boolean",
+      "required": true
     }
   }
 }
