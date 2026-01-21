@@ -70,10 +70,6 @@
       "type": "string",
       "required": true
     },
-    "employee_id": {
-      "type": "string",
-      "required": true
-    },
     "joining_date": {
       "type": "date",
       "required": true
@@ -211,6 +207,34 @@
     },
     "is_active": {
       "type": "boolean",
+      "required": true
+    },
+    "emp_code": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "company"
+            },
+            "AIA"
+          ]
+        }
+      },
+      "required": true
+    },
+    "emp_id": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "company"
+            },
+            "Vega"
+          ]
+        }
+      },
       "required": true
     }
   }

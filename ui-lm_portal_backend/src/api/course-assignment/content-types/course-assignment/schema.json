@@ -21,15 +21,8 @@
         "Individual"
       ]
     },
-    "assignment_target_value": {
-      "type": "string",
-      "required": true
-    },
     "completion_date": {
-      "type": "date"
-    },
-    "assigned_at": {
-      "type": "datetime",
+      "type": "date",
       "required": true
     },
     "is_active": {

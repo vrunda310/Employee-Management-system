@@ -634,7 +634,6 @@ export interface ApiCourseAssignmentCourseAssignment
     draftAndPublish: true;
   };
   attributes: {
-    assigned_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     assigned_by: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.user'
@@ -643,9 +642,7 @@ export interface ApiCourseAssignmentCourseAssignment
       ['Department', 'Location', 'Role', 'Individual']
     > &
       Schema.Attribute.Required;
-    assignment_target_value: Schema.Attribute.String &
-      Schema.Attribute.Required;
-    completion_date: Schema.Attribute.Date;
+    completion_date: Schema.Attribute.Date & Schema.Attribute.Required;
     course: Schema.Attribute.Relation<'manyToOne', 'api::course.course'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1941,7 +1938,8 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
-    employee_id: Schema.Attribute.String & Schema.Attribute.Required;
+    emp_code: Schema.Attribute.String & Schema.Attribute.Required;
+    emp_id: Schema.Attribute.String & Schema.Attribute.Required;
     employee_name: Schema.Attribute.String & Schema.Attribute.Required;
     employment_type: Schema.Attribute.String & Schema.Attribute.Required;
     exit_date: Schema.Attribute.Date & Schema.Attribute.Required;

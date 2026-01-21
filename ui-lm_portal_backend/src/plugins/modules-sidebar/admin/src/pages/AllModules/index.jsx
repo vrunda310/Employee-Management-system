@@ -1,0 +1,694 @@
+import React, { useMemo, Children, useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+import { Page, Layouts } from '@strapi/admin/strapi-admin';
+import { Box, Typography, Flex } from '@strapi/design-system';
+import { 
+  Briefcase,
+  PinMap,
+  User,
+  Book,
+  Question,
+  Message
+} from '@strapi/icons';
+
+/**
+ * All Modules page
+ *
+ * This page provides the collapsible module UX matching Strapi's default UI styling.
+ * Each item links to the real Content Manager routes.
+ */
+
+const AdminLink = ({ to, label }) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+  
+  // Add query parameter to signal hiding the sidebar
+  const linkTo = `${to}?fromModules=true`;
+  
+  return (
+    <Box
+      as={Link}
+      to={linkTo}
+      paddingLeft={4}
+      paddingRight={4}
+      paddingTop={2}
+      paddingBottom={2}
+      style={{
+        textDecoration: 'none',
+        display: 'block',
+        borderRadius: '4px',
+        transition: 'all 0.15s ease',
+        marginBottom: '2px',
+        backgroundColor: isActive ? 'var(--strapi-primary-100)' : 'transparent',
+      }}
+      onClick={() => {
+        // Set a session flag so downstream pages know to hide the CM sidebar
+        // BUT only for HR Admin and LM Admin, NOT for Super Admin
+        try {
+          // Check if user is Super Admin - check multiple sources
+          let isSuperAdmin = false;
+          
+          // Check window roles (set by AllModules page)
+          const windowRoles = window.__MODULES_SIDEBAR_ROLES__ || [];
+          isSuperAdmin = windowRoles.some(r => {
+            const name = (r?.name || '').toLowerCase();
+            return name === 'super admin' || name.includes('super admin');
+          });
+          
+          // If not found, check Redux store
+          if (!isSuperAdmin) {
+            try {
+              const state = window.strapi?.store?.getState?.() || {};
+              const adminUser = state?.admin_app?.user;
+              const reduxRoles = adminUser?.roles || [];
+              isSuperAdmin = reduxRoles.some(r => {
+                const name = (r?.name || '').toLowerCase();
+                return name === 'super admin' || name.includes('super admin');
+              });
+            } catch (e) {
+              // Ignore Redux errors
+            }
+          }
+          
+          if (!isSuperAdmin) {
+            // HR Admin or LM Admin - hide CM sidebar
+            window.sessionStorage.setItem('hideCmSidebar', 'true');
+          } else {
+            // Super Admin should see the sidebar
+            window.sessionStorage.removeItem('hideCmSidebar');
+          }
+        } catch (err) {
+          // ignore storage errors
+        }
+      }}
+      onMouseEnter={(e) => {
+        if (!isActive) {
+          e.currentTarget.style.backgroundColor = 'var(--strapi-neutral-100)';
+          const labelEl = e.currentTarget.querySelector('[data-role="module-link-label"]');
+          if (labelEl) {
+            labelEl.style.color = '#4945ff';
+          }
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!isActive) {
+          e.currentTarget.style.backgroundColor = 'transparent';
+          const labelEl = e.currentTarget.querySelector('[data-role="module-link-label"]');
+          if (labelEl) {
+            labelEl.style.color = '#212134';
+          }
+        }
+      }}
+    >
+      <Flex alignItems="center" gap={2}>
+        <Box
+          width="4px"
+          height="4px"
+          background={isActive ? 'primary600' : 'neutral400'}
+          hasRadius
+          style={{ flexShrink: 0 }}
+        />
+        <Typography 
+          variant="omega" 
+          textColor={isActive ? 'primary600' : 'neutral900'}
+          fontWeight={isActive ? 'semiBold' : 'regular'}
+          data-role="module-link-label"
+          style={{ color: isActive ? '#4945ff' : '#212134' }}
+        >
+          {label}
+        </Typography>
+      </Flex>
+    </Box>
+  );
+};
+
+const Section = ({ title, children, icon: Icon }) => {
+  // Count children to determine if we need columns
+  const childrenArray = Children.toArray(children);
+  const itemCount = childrenArray.length;
+  const needsColumns = itemCount > 4;
+  
+  // Split children: exactly 4 items in first column, rest in second column
+  const firstColumn = needsColumns ? childrenArray.slice(0, 4) : childrenArray;
+  const secondColumn = needsColumns ? childrenArray.slice(4) : [];
+  
+  return (
+    <Box
+      marginBottom={4}
+      padding={6}
+      background="neutral0"
+      hasRadius
+      shadow="tableShadow"
+      borderColor="neutral200"
+      borderWidth="1px"
+      borderStyle="solid"
+      style={{
+        transition: 'all 0.2s ease',
+        backgroundColor: '#ffffff',
+        borderColor: '#e0e0e0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Flex
+        gap={3}
+        alignItems="center"
+        style={{ 
+          padding: '0 0 16px 0',
+          marginBottom: '8px',
+        }}
+      >
+        {Icon && (
+          <Box
+            padding={2}
+            background="primary100"
+            hasRadius
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              backgroundColor: '#f0f0ff',
+              borderRadius: '4px',
+            }}
+          >
+            <Icon 
+              aria-hidden 
+              width="18px" 
+              height="18px"
+              fill="#4945ff"
+              style={{ color: '#4945ff' }}
+            />
+          </Box>
+        )}
+        <Typography 
+          variant="sigma" 
+          textColor="neutral800"
+          fontWeight="semiBold"
+          style={{ flex: 1, fontSize: '13px', color: '#32324d', letterSpacing: '0.01em' }}
+        >
+          {title}
+        </Typography>
+      </Flex>
+      <Box 
+        paddingTop={2}
+        style={{
+          flex: 1,
+          display: needsColumns ? 'grid' : 'block',
+          gridTemplateColumns: needsColumns ? '1fr 1fr' : 'none',
+          gap: needsColumns ? '0 16px' : '0',
+        }}
+      >
+        <Box>
+          {firstColumn}
+        </Box>
+        {needsColumns && (
+          <Box>
+            {secondColumn}
+          </Box>
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+// Custom hook to hide Content Manager sidebar when fromModules query param is present
+const useHideContentManagerSidebar = () => {
+  React.useEffect(() => {
+    const hideSidebar = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('fromModules') === 'true') {
+        // Multiple selectors to catch the sidebar
+        const selectors = [
+          '[class*="LeftMenu"]',
+          '[class*="sideNav"]',
+          'nav[aria-label*="Content Manager"]',
+          '[data-testid="content-manager-sidebar"]',
+          // Strapi v5 specific: Layouts.Root's first child (sidebar)
+          '[class*="Layouts-Root"] > nav:first-child',
+          '[class*="Layouts-Root"] > aside:first-child',
+        ];
+
+        selectors.forEach((selector) => {
+          const elements = document.querySelectorAll(selector);
+          elements.forEach((el) => {
+            // Check if it's actually a sidebar (has links to content types)
+            if (el.querySelector('a[href*="/content-manager/collection-types"]') || 
+                el.querySelector('a[href*="/content-manager/single-types"]')) {
+              el.style.display = 'none';
+              // Also hide parent if it's a container
+              const parent = el.parentElement;
+              if (parent && parent.classList.toString().includes('Layouts-Root')) {
+                // Expand the main content area
+                const mainContent = Array.from(parent.children).find(
+                  (child) => child !== el && !child.classList.toString().includes('DragLayer')
+                );
+                if (mainContent) {
+                  mainContent.style.width = '100%';
+                  mainContent.style.maxWidth = '100%';
+                  mainContent.style.flex = '1 1 100%';
+                }
+              }
+            }
+          });
+        });
+      }
+    };
+
+    // Run immediately and on route changes
+    hideSidebar();
+    const interval = setInterval(hideSidebar, 300);
+    
+    // Also listen to navigation events
+    const handlePopState = () => {
+      setTimeout(hideSidebar, 100);
+    };
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+};
+
+const AllModulesPage = () => {
+  // Use the hook to hide sidebar when navigating from All Modules
+  useHideContentManagerSidebar();
+
+  // State to store roles fetched from API
+  const [apiRoles, setApiRoles] = useState([]);
+
+  // Get token from Redux store
+  const token = useSelector((state) => state?.admin_app?.token);
+
+  // Fetch current user from API as fallback
+  useEffect(() => {
+    if (!token) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[AllModules] No token found, skipping API call');
+      }
+      return;
+    }
+
+    const fetchUserRoles = async () => {
+      try {
+        // Try Strapi admin API endpoint with roles populated
+        const baseURL = window.strapi?.backendURL || 'http://localhost:1337';
+        const response = await fetch(`${baseURL}/admin/users/me?populate=roles`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          credentials: 'include',
+        });
+        
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[AllModules] API response status:', response.status, response.statusText);
+        }
+        
+        if (response.ok) {
+          const responseData = await response.json();
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[AllModules] Fetched user from API:', responseData);
+          }
+          
+          // Handle Strapi v5 API response structure: { data: { ... } }
+          const userData = responseData?.data || responseData;
+          
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[AllModules] Extracted userData:', userData);
+            console.log('[AllModules] userData.roles:', userData?.roles);
+          }
+          
+          if (userData?.roles) {
+            const roles = Array.isArray(userData.roles) ? userData.roles : [userData.roles];
+            setApiRoles(roles);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[AllModules] Set API roles:', roles);
+            }
+          } else if (userData?.role) {
+            // Handle single role
+            setApiRoles([userData.role]);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[AllModules] Set API role (single):', userData.role);
+            }
+          }
+        } else {
+          const errorText = await response.text();
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[AllModules] API error response:', errorText);
+          }
+          // Try alternative endpoint with populate
+          const altResponse = await fetch(`${baseURL}/admin/users/me?populate=*`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            credentials: 'include',
+          });
+          if (altResponse.ok) {
+            const responseData = await altResponse.json();
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[AllModules] Fetched user from alternative API:', responseData);
+            }
+            // Handle Strapi v5 API response structure
+            const userData = responseData?.data || responseData;
+            if (userData?.roles) {
+              const roles = Array.isArray(userData.roles) ? userData.roles : [userData.roles];
+              setApiRoles(roles);
+            } else if (userData?.role) {
+              setApiRoles([userData.role]);
+            }
+          }
+        }
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[AllModules] Failed to fetch user from API:', error);
+        }
+      }
+    };
+    fetchUserRoles();
+  }, [token]);
+
+  // Strapi admin stores user info - try multiple paths
+  // Memoize the selector to avoid creating a new function on every render
+  const selectRoles = useMemo(() => (state) => {
+    // Try multiple paths to find user roles
+    const adminUser = state?.admin_app?.user;
+    const authUser = state?.auth?.user || state?.auth?.userInfo;
+    const adminApi = state?.adminApi;
+    
+    // Try to get roles from various locations
+    let foundRoles = 
+      adminUser?.roles ||
+      authUser?.roles ||
+      adminUser?.userInfo?.roles ||
+      authUser?.userInfo?.roles ||
+      state?.admin_app?.userInfo?.roles ||
+      state?.auth?.userInfo?.roles ||
+      // Check adminApi
+      adminApi?.user?.roles ||
+      adminApi?.userInfo?.roles ||
+      // Try single role property
+      (adminUser?.role ? [adminUser.role] : null) ||
+      (authUser?.role ? [authUser.role] : null) ||
+      (adminApi?.user?.role ? [adminApi.user.role] : null) ||
+      // Try window.strapi
+      window?.strapi?.user?.roles ||
+      window?.strapi?.currentUser?.roles ||
+      window?.strapi?.admin?.user?.roles ||
+      (window?.strapi?.user?.role ? [window.strapi.user.role] : null) ||
+      (window?.strapi?.currentUser?.role ? [window.strapi.currentUser.role] : null) ||
+      [];
+    
+    // If roles is an array of role objects, return as is
+    // If it's a single role object, wrap it in an array
+    if (foundRoles && !Array.isArray(foundRoles)) {
+      foundRoles = [foundRoles];
+    }
+    
+    // Debug: log the entire state structure to find where roles are stored
+    if (process.env.NODE_ENV === 'development' && (!foundRoles || foundRoles.length === 0)) {
+      console.log('[AllModules] admin_app:', state?.admin_app);
+      console.log('[AllModules] admin_app.permissions:', state?.admin_app?.permissions);
+      console.log('[AllModules] adminApi:', adminApi);
+      // Check if permissions object has role info
+      const permissions = state?.admin_app?.permissions;
+      if (permissions && typeof permissions === 'object') {
+        console.log('[AllModules] permissions keys:', Object.keys(permissions));
+        // Try to find role info in permissions
+        Object.keys(permissions).forEach(key => {
+          if (key.toLowerCase().includes('role') || key.toLowerCase().includes('user')) {
+            console.log(`[AllModules] Found ${key}:`, permissions[key]);
+          }
+        });
+      }
+      console.log('[AllModules] Found roles from Redux:', foundRoles);
+      console.log('[AllModules] adminUser:', adminUser);
+      console.log('[AllModules] authUser:', authUser);
+      console.log('[AllModules] adminApi.user:', adminApi?.user);
+    }
+    
+    return foundRoles || [];
+  }, []);
+  
+  const reduxRoles = useSelector(selectRoles);
+
+  // Combine Redux roles and API roles (API takes precedence if Redux is empty)
+  const roles = useMemo(() => {
+    if (reduxRoles && reduxRoles.length > 0) {
+      return reduxRoles;
+    }
+    if (apiRoles && apiRoles.length > 0) {
+      return apiRoles;
+    }
+    return [];
+  }, [reduxRoles, apiRoles]);
+
+  // Store roles in window and sessionStorage for global script access
+  useEffect(() => {
+    if (roles && roles.length > 0) {
+      try {
+        window.__MODULES_SIDEBAR_ROLES__ = roles;
+        sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(roles));
+      } catch (e) {
+        // Ignore storage errors
+      }
+    }
+  }, [roles]);
+
+  const roleFlags = useMemo(() => {
+    // Helper to check exact match first, then contains
+    const hasCodeOrName = (needle) =>
+      roles.some(
+        (r) =>
+          r?.code?.toLowerCase() === needle.toLowerCase() ||
+          r?.name?.toLowerCase() === needle.toLowerCase()
+      );
+    const contains = (needle) =>
+      roles.some(
+        (r) =>
+          r?.code?.toLowerCase().includes(needle.toLowerCase()) ||
+          r?.name?.toLowerCase().includes(needle.toLowerCase())
+      );
+    
+    // Match exact role names: "Super Admin", "HR Admin", "LM Admin"
+    // Priority: exact match first, then contains
+    const isSuperAdmin =
+      hasCodeOrName('super admin') ||
+      hasCodeOrName('strapi-super-admin') ||
+      contains('super admin') ||
+      contains('super-admin');
+    
+    // For HR Admin: check for exact "hr admin" first, then just "hr"
+    const isHR = 
+      hasCodeOrName('hr admin') ||
+      contains('hr admin') ||
+      (hasCodeOrName('hr') && !contains('lm')); // Only match "hr" if it doesn't contain "lm"
+    
+    // For LM Admin: check for exact "lm admin" first, then just "lm"
+    const isLM = 
+      hasCodeOrName('lm admin') ||
+      contains('lm admin') ||
+      (hasCodeOrName('lm') && !contains('hr')) || // Only match "lm" if it doesn't contain "hr"
+      (contains('lm') && !contains('hr') && !contains('hr admin')); // Only match "lm" if it doesn't contain "hr"
+    
+    // Debug logging (remove in production if needed)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[AllModules] Roles detected:', roles);
+      console.log('[AllModules] Role flags:', { isSuperAdmin, isHR, isLM });
+    }
+    
+    return { isSuperAdmin, isHR, isLM };
+  }, [roles]);
+
+  // If roles are empty (could not be read), be permissive: user already passed plugin permission to reach here.
+  const rolesKnown = Array.isArray(roles) && roles.length > 0;
+  const effectiveFlags = rolesKnown
+    ? roleFlags
+    : {
+        // When roles are unknown, allow everything (user already has plugin permission)
+        isSuperAdmin: true,
+        isHR: true,
+        isLM: true,
+      };
+  
+  // Ensure only one role is active at a time (Super Admin takes precedence)
+  const finalFlags = effectiveFlags.isSuperAdmin
+    ? { isSuperAdmin: true, isHR: false, isLM: false }
+    : { isSuperAdmin: false, isHR: effectiveFlags.isHR, isLM: effectiveFlags.isLM };
+  
+  const canSeeAllModules =
+    finalFlags.isSuperAdmin || finalFlags.isHR || finalFlags.isLM;
+
+  return (
+    <>
+      <Page.Title>All Modules</Page.Title>
+      <Page.Main>
+        <Layouts.Header
+          title="All Modules"
+          subtitle="Access your content through organized modules"
+          as="h2"
+        />
+        <Layouts.Content>
+          {canSeeAllModules ? (
+            <Box
+              paddingLeft={8}
+              paddingRight={8}
+              paddingTop={6}
+              paddingBottom={8}
+              style={{
+                width: '100%',
+                maxWidth: '1400px',
+                margin: '0 auto',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '20px',
+                alignItems: 'stretch', // Make all cards same height
+              }}
+            >
+              {/* 1. Organization - HR + Super (hidden for LM Admin) */}
+              {(finalFlags.isSuperAdmin || finalFlags.isHR) && !finalFlags.isLM && (
+                <Section title="Organization" icon={Briefcase}>
+                  <AdminLink
+                    label="Company"
+                    to="/content-manager/collection-types/api::company.company"
+                  />
+                  <AdminLink
+                    label="Company Policies"
+                    to="/content-manager/collection-types/api::company-policy.company-policy"
+                  />
+                  <AdminLink
+                    label="Department"
+                    to="/content-manager/collection-types/api::department.department"
+                  />
+                  <AdminLink
+                    label="Designation"
+                    to="/content-manager/collection-types/api::designation.designation"
+                  />
+                </Section>
+              )}
+
+              {/* 2. HR Management - HR + Super (hidden for LM Admin) */}
+              {(finalFlags.isSuperAdmin || finalFlags.isHR) && !finalFlags.isLM && (
+                <Section title="HR Management" icon={User}>
+                  <AdminLink label="User" to="/content-manager/collection-types/plugin::users-permissions.user" />
+                  <AdminLink
+                    label="Holidays"
+                    to="/content-manager/collection-types/api::holiday.holiday"
+                  />
+                  <AdminLink
+                    label="Gallery Items"
+                    to="/content-manager/collection-types/api::gallery-item.gallery-item"
+                  />
+                  <AdminLink
+                    label="Form Templates"
+                    to="/content-manager/collection-types/api::form-template.form-template"
+                  />
+                </Section>
+              )}
+
+              {/* 3. Location Management - HR + Super (hidden for LM Admin) */}
+              {(finalFlags.isSuperAdmin || finalFlags.isHR) && !finalFlags.isLM && (
+                <Section title="Location Management" icon={PinMap}>
+                  <AdminLink label="Area" to="/content-manager/collection-types/api::area.area" />
+                  <AdminLink label="City" to="/content-manager/collection-types/api::city.city" />
+                  <AdminLink
+                    label="Unit Locations"
+                    to="/content-manager/collection-types/api::unit-location.unit-location"
+                  />
+                  <AdminLink label="Routes" to="/content-manager/collection-types/api::route.route" />
+                </Section>
+              )}
+
+              {/* 4. Content & Communication - HR + Super (hidden for LM Admin) */}
+              {(finalFlags.isSuperAdmin || finalFlags.isHR) && !finalFlags.isLM && (
+                <Section title="Content & Communication" icon={Message}>
+                  <AdminLink
+                    label="Announcements"
+                    to="/content-manager/collection-types/api::announcement.announcement"
+                  />
+                  <AdminLink
+                    label="Notifications"
+                    to="/content-manager/collection-types/api::notification.notification"
+                  />
+                  <AdminLink label="News" to="/content-manager/collection-types/api::news.news" />
+                  <AdminLink
+                    label="News Categories"
+                    to="/content-manager/collection-types/api::news-category.news-category"
+                  />
+                  <AdminLink label="Events" to="/content-manager/collection-types/api::event.event" />
+                  <AdminLink
+                    label="Important Links"
+                    to="/content-manager/collection-types/api::important-link.important-link"
+                  />
+                </Section>
+              )}
+
+              {/* 5. Learning Management - LM + Super (hidden for HR Admin) */}
+              {(finalFlags.isSuperAdmin || finalFlags.isLM) && !finalFlags.isHR && (
+                <Section title="Learning Management" icon={Book}>
+                  <AdminLink
+                    label="Courses"
+                    to="/content-manager/collection-types/api::course.course"
+                  />
+                  <AdminLink
+                    label="Course Categories"
+                    to="/content-manager/collection-types/api::course-category.course-category"
+                  />
+                  <AdminLink
+                    label="Course Modules"
+                    to="/content-manager/collection-types/api::course-module.course-module"
+                  />
+                  <AdminLink
+                    label="Course Assignments"
+                    to="/content-manager/collection-types/api::course-assignment.course-assignment"
+                  />
+                </Section>
+              )}
+
+              {/* 6. Quiz Management - LM + Super (hidden for HR Admin) */}
+              {(finalFlags.isSuperAdmin || finalFlags.isLM) && !finalFlags.isHR && (
+                <Section title="Quiz Management" icon={Question}>
+                  {/* NOTE: Real UID is api::quizze.quizze; keeping label as "Quizzes" */}
+                  <AdminLink
+                    label="Quizzes"
+                    to="/content-manager/collection-types/api::quizze.quizze"
+                  />
+                  <AdminLink
+                    label="Quiz Questions"
+                    to="/content-manager/collection-types/api::quiz-question.quiz-question"
+                  />
+                  <AdminLink
+                    label="Quiz Submissions"
+                    to="/content-manager/collection-types/api::quiz-submission.quiz-submission"
+                  />
+                  <AdminLink
+                    label="User Progress"
+                    to="/content-manager/collection-types/api::user-progress.user-progress"
+                  />
+                </Section>
+              )}
+
+            </Box>
+          ) : (
+            <Box paddingLeft={6} paddingRight={6} paddingTop={6} paddingBottom={6}>
+              <Typography variant="omega" textColor="danger600">
+                You do not have access to All Modules.
+              </Typography>
+            </Box>
+          )}
+        </Layouts.Content>
+      </Page.Main>
+    </>
+  );
+};
+
+export default AllModulesPage;
+
