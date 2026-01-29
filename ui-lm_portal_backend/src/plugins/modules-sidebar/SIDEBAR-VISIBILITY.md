@@ -96,3 +96,6 @@ This gives deterministic, role-isolated behavior: first render after login uses 
 
 5. **URL MutationObserver**  
    When the URL changes to `/auth/login` or `/logout`, set body to `pending` and clear `__is_super_admin__` in addition to existing cache clears.
+
+6. **Initial state check when subscribing to Redux**  
+   Redux `store.subscribe()` does **not** call the callback with the initial state—only on subsequent changes. If Super Admin is already in the store when we subscribe (e.g. after login, or when the store is found via polling), we would never run our logic. We now call `applyBodyFlagFromState(store.getState())` immediately when we subscribe, so Super Admin sees all sidebar options on first render without needing to click "All Modules".
