@@ -96,6 +96,11 @@
     },
     "description": {
       "type": "text"
+    },
+    "mark_as_read": {
+      "type": "boolean",
+      "required": true,
+      "default": false
     }
   }
 }

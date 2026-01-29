@@ -39,6 +39,10 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::quizze.quizze"
+    },
+    "submitted_at": {
+      "type": "datetime",
+      "required": true
     }
   }
 }

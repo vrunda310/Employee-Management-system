@@ -21,7 +21,7 @@
         "Individual"
       ]
     },
-    "completion_date": {
+    "due_date": {
       "type": "date",
       "required": true
     },
