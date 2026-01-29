@@ -1846,12 +1846,62 @@ if (typeof window !== 'undefined') {
     setTimeout(runHideLogic, 2000);
   };
 
+  // Shared: apply body flag from Redux state (used on subscribe + on state change)
+  const applyBodyFlagFromState = (state) => {
+    const currentUser = state?.admin_app?.user || state?.auth?.user;
+    const roles = currentUser?.roles || [];
+    if (!roles || roles.length === 0) return false;
+    const isSuper = roles.some(r => {
+      const n = (r?.name || '').toLowerCase();
+      return n === 'super admin' || n.includes('super admin');
+    });
+    const isHR = roles.some(r => {
+      const n = (r?.name || '').toLowerCase();
+      return n.includes('hr admin') || (n.includes('hr') && !n.includes('lm') && !n.includes('admin'));
+    });
+    const isLM = roles.some(r => {
+      const n = (r?.name || '').toLowerCase();
+      return n.includes('lm admin') || (n.includes('lm') && !n.includes('hr') && !n.includes('admin'));
+    });
+    const isAdmin = roles.some(r => {
+      const n = (r?.name || '').toLowerCase();
+      return (n === 'admin' || n.includes('admin')) && !n.includes('super') && !n.includes('hr') && !n.includes('lm');
+    });
+    const shouldHide = !isSuper && (isHR || isLM || isAdmin);
+    const value = shouldHide ? 'true' : 'false';
+    if (document.body) {
+      document.body.setAttribute('data-hide-cm-sidebar', value);
+      document.body.dataset.hideCmSidebar = value;
+    }
+    try {
+      sessionStorage.setItem('__is_super_admin__', isSuper ? 'true' : 'false');
+      sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(roles));
+      window.__MODULES_SIDEBAR_ROLES__ = roles;
+    } catch (e) {}
+    cachedRoles = roles;
+    cachedIsSuperAdmin = isSuper ? true : false;
+    roleFlagsCache = null;
+    isInitialLoad = false;
+    return true;
+  };
+
   // Subscribe to Redux store when available (may not exist at plugin load)
   const registerReduxSubscriber = (store) => {
     if (!store || typeof store.subscribe !== 'function') return false;
-      let lastState = null;
-      let lastRoles = null;
-      store.subscribe(() => {
+    let lastState = null;
+    let lastRoles = null;
+
+    // CRITICAL: Redux subscribe() does NOT call with initial state - only on changes.
+    // Super Admin may already be in store when we subscribe (e.g. after login). Run immediately.
+    const initialState = store.getState();
+    lastState = initialState;
+    if (applyBodyFlagFromState(initialState)) {
+      const currentUser = initialState?.admin_app?.user || initialState?.auth?.user;
+      lastRoles = currentUser?.roles || [];
+      runHideLogic(); // Ensure sidebar reflects flag on first render
+    }
+
+    store.subscribe(() => {
         try {
           const currentState = store.getState();
           const currentUser = currentState?.admin_app?.user || currentState?.auth?.user;
@@ -1890,75 +1940,15 @@ if (typeof window !== 'undefined') {
           const roles = currentUser?.roles || [];
           const rolesChanged = roles !== lastRoles && roles && roles.length > 0;
 
-          if (rolesChanged || userJustLoggedIn) {
-            if (roles && roles.length > 0) {
-              // If user just logged in (different user), clear old sessionStorage
-              if (userJustLoggedIn) {
-                try {
-                  sessionStorage.removeItem('__is_super_admin__');
-                  sessionStorage.removeItem('__modules_sidebar_roles__');
-                } catch (e) {}
-              }
-              
-              const isSuper = roles.some(r => {
-                const name = (r?.name || '').toLowerCase();
-                return name === 'super admin' || name.includes('super admin');
-              });
-              
-              // Check if HR, LM, or Admin
-              const isHR = roles.some(r => {
-                const name = (r?.name || '').toLowerCase();
-                return name.includes('hr admin') || (name.includes('hr') && !name.includes('lm') && !name.includes('admin'));
-              });
-              const isLM = roles.some(r => {
-                const name = (r?.name || '').toLowerCase();
-                return name.includes('lm admin') || (name.includes('lm') && !name.includes('hr') && !name.includes('admin'));
-              });
-              const isAdmin = roles.some(r => {
-                const name = (r?.name || '').toLowerCase();
-                return (name === 'admin' || name.includes('admin')) && !name.includes('super') && !name.includes('hr') && !name.includes('lm');
-              });
-              
-              // Calculate body flag value immediately
-              const shouldHide = !isSuper && (isHR || isLM || isAdmin);
-              const bodyFlagValue = shouldHide ? 'true' : 'false';
-              
-              // CRITICAL: Set body flag SYNCHRONOUSLY (no delays)
-              const setBodyFlagSync = (value) => {
-                if (document.body) {
-                  document.body.setAttribute('data-hide-cm-sidebar', value);
-                  document.body.dataset.hideCmSidebar = value;
-                } else {
-                  // Body not ready - set it when body appears (check every 1ms for speed)
-                  const setFlag = () => {
-                    if (document.body) {
-                      document.body.setAttribute('data-hide-cm-sidebar', value);
-                      document.body.dataset.hideCmSidebar = value;
-                    } else {
-                      setTimeout(setFlag, 1);
-                    }
-                  };
-                  setFlag();
-                }
-              };
-              setBodyFlagSync(bodyFlagValue);
-              
-              // Immediately set persistent status
+          if ((rolesChanged || userJustLoggedIn) && roles && roles.length > 0) {
+            if (userJustLoggedIn) {
               try {
-                sessionStorage.setItem('__is_super_admin__', isSuper ? 'true' : 'false');
-                sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(roles));
-                window.__MODULES_SIDEBAR_ROLES__ = roles;
+                sessionStorage.removeItem('__is_super_admin__');
+                sessionStorage.removeItem('__modules_sidebar_roles__');
               } catch (e) {}
-              
-              // Update cache immediately
-              cachedRoles = roles;
-              cachedIsSuperAdmin = isSuper ? true : false;
-              roleFlagsCache = null; // Force recalculation
-              isInitialLoad = false;
-              
+            }
+            if (applyBodyFlagFromState(currentState)) {
               lastRoles = roles;
-              
-              // CSS handles visibility - no need for runHideLogic delay
             }
           }
           
