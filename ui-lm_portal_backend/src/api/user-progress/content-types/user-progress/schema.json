@@ -36,8 +36,9 @@
     "completed_at": {
       "type": "datetime"
     },
-    "last_accessed": {
-      "type": "datetime"
+    "last_accessed_at": {
+      "type": "datetime",
+      "required": true
     },
     "time_spent_minutes": {
       "type": "integer",
