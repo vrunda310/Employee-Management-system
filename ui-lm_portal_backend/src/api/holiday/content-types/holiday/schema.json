@@ -32,7 +32,8 @@
     },
     "is_active": {
       "type": "boolean",
-      "required": true
+      "required": true,
+      "default": true
     },
     "is_optional": {
       "type": "boolean",
@@ -95,7 +96,7 @@
         "visible": {
           "==": [
             {
-              "var": "holiday_applied_at"
+              "var": "holiday_for"
             },
             "Company"
           ]
@@ -110,7 +111,7 @@
         "visible": {
           "==": [
             {
-              "var": "holiday_applied_at"
+              "var": "holiday_for"
             },
             "Department"
           ]

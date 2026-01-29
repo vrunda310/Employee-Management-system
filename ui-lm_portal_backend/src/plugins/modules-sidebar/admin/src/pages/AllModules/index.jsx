@@ -73,7 +73,7 @@ const AdminLink = ({ to, label }) => {
           }
           
           if (!isSuperAdmin) {
-            // HR Admin or LM Admin - hide CM sidebar
+            // HR Admin, LM Admin, or Admin - hide CM sidebar
             window.sessionStorage.setItem('hideCmSidebar', 'true');
           } else {
             // Super Admin should see the sidebar
@@ -126,8 +126,14 @@ const AdminLink = ({ to, label }) => {
 
 const Section = ({ title, children, icon: Icon }) => {
   // Count children to determine if we need columns
-  const childrenArray = Children.toArray(children);
+  const childrenArray = Children.toArray(children).filter(child => child !== null && child !== undefined);
   const itemCount = childrenArray.length;
+  
+  // Don't render section if there are no children
+  if (itemCount === 0) {
+    return null;
+  }
+  
   const needsColumns = itemCount > 4;
   
   // Split children: exactly 4 items in first column, rest in second column
@@ -281,6 +287,8 @@ const AllModulesPage = () => {
 
   // State to store roles fetched from API
   const [apiRoles, setApiRoles] = useState([]);
+  // State to store flattened admin permissions (from /admin/users/me/permissions)
+  const [permissions, setPermissions] = useState([]);
 
   // Get token from Redux store
   const token = useSelector((state) => state?.admin_app?.token);
@@ -328,12 +336,36 @@ const AllModulesPage = () => {
           if (userData?.roles) {
             const roles = Array.isArray(userData.roles) ? userData.roles : [userData.roles];
             setApiRoles(roles);
+            
+            // CRITICAL: Store roles IMMEDIATELY in window and sessionStorage
+            // This allows the global script to access them right away
+            try {
+              window.__MODULES_SIDEBAR_ROLES__ = roles;
+              sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(roles));
+              // Trigger a custom event to notify global script immediately
+              window.dispatchEvent(new CustomEvent('modules-sidebar-roles-updated', { detail: roles }));
+            } catch (e) {
+              // Ignore storage errors
+            }
+            
             if (process.env.NODE_ENV === 'development') {
               console.log('[AllModules] Set API roles:', roles);
             }
           } else if (userData?.role) {
             // Handle single role
-            setApiRoles([userData.role]);
+            const roles = [userData.role];
+            setApiRoles(roles);
+            
+            // CRITICAL: Store roles IMMEDIATELY in window and sessionStorage
+            try {
+              window.__MODULES_SIDEBAR_ROLES__ = roles;
+              sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(roles));
+              // Trigger a custom event to notify global script immediately
+              window.dispatchEvent(new CustomEvent('modules-sidebar-roles-updated', { detail: roles }));
+            } catch (e) {
+              // Ignore storage errors
+            }
+            
             if (process.env.NODE_ENV === 'development') {
               console.log('[AllModules] Set API role (single):', userData.role);
             }
@@ -362,8 +394,27 @@ const AllModulesPage = () => {
             if (userData?.roles) {
               const roles = Array.isArray(userData.roles) ? userData.roles : [userData.roles];
               setApiRoles(roles);
+              
+              // CRITICAL: Store roles IMMEDIATELY
+              try {
+                window.__MODULES_SIDEBAR_ROLES__ = roles;
+                sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(roles));
+                window.dispatchEvent(new CustomEvent('modules-sidebar-roles-updated', { detail: roles }));
+              } catch (e) {
+                // Ignore storage errors
+              }
             } else if (userData?.role) {
-              setApiRoles([userData.role]);
+              const roles = [userData.role];
+              setApiRoles(roles);
+              
+              // CRITICAL: Store roles IMMEDIATELY
+              try {
+                window.__MODULES_SIDEBAR_ROLES__ = roles;
+                sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(roles));
+                window.dispatchEvent(new CustomEvent('modules-sidebar-roles-updated', { detail: roles }));
+              } catch (e) {
+                // Ignore storage errors
+              }
             }
           }
         }
@@ -451,17 +502,45 @@ const AllModulesPage = () => {
     return [];
   }, [reduxRoles, apiRoles]);
 
-  // Store roles in window and sessionStorage for global script access
+  // Store roles in window and sessionStorage IMMEDIATELY when fetched
+  // This allows the global script to access roles as early as possible
   useEffect(() => {
-    if (roles && roles.length > 0) {
+    // Store Redux roles immediately if available
+    if (reduxRoles && reduxRoles.length > 0) {
       try {
-        window.__MODULES_SIDEBAR_ROLES__ = roles;
-        sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(roles));
+        window.__MODULES_SIDEBAR_ROLES__ = reduxRoles;
+        sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(reduxRoles));
+        // Trigger a custom event to notify global script
+        window.dispatchEvent(new CustomEvent('modules-sidebar-roles-updated', { detail: reduxRoles }));
       } catch (e) {
         // Ignore storage errors
       }
     }
-  }, [roles]);
+    
+    // Store API roles when they arrive (they take precedence)
+    if (apiRoles && apiRoles.length > 0) {
+      try {
+        window.__MODULES_SIDEBAR_ROLES__ = apiRoles;
+        sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(apiRoles));
+        // Trigger a custom event to notify global script
+        window.dispatchEvent(new CustomEvent('modules-sidebar-roles-updated', { detail: apiRoles }));
+      } catch (e) {
+        // Ignore storage errors
+      }
+    }
+    
+    // Store combined roles
+    if (roles && roles.length > 0) {
+      try {
+        window.__MODULES_SIDEBAR_ROLES__ = roles;
+        sessionStorage.setItem('__modules_sidebar_roles__', JSON.stringify(roles));
+        // Trigger a custom event to notify global script
+        window.dispatchEvent(new CustomEvent('modules-sidebar-roles-updated', { detail: roles }));
+      } catch (e) {
+        // Ignore storage errors
+      }
+    }
+  }, [roles, reduxRoles, apiRoles]);
 
   const roleFlags = useMemo(() => {
     // Helper to check exact match first, then contains
@@ -478,7 +557,7 @@ const AllModulesPage = () => {
           r?.name?.toLowerCase().includes(needle.toLowerCase())
       );
     
-    // Match exact role names: "Super Admin", "HR Admin", "LM Admin"
+    // Match exact role names: "Super Admin", "HR Admin", "LM Admin", "Admin"
     // Priority: exact match first, then contains
     const isSuperAdmin =
       hasCodeOrName('super admin') ||
@@ -490,22 +569,29 @@ const AllModulesPage = () => {
     const isHR = 
       hasCodeOrName('hr admin') ||
       contains('hr admin') ||
-      (hasCodeOrName('hr') && !contains('lm')); // Only match "hr" if it doesn't contain "lm"
+      (hasCodeOrName('hr') && !contains('lm') && !contains('admin')); // Only match "hr" if it doesn't contain "lm" or "admin"
     
     // For LM Admin: check for exact "lm admin" first, then just "lm"
     const isLM = 
       hasCodeOrName('lm admin') ||
       contains('lm admin') ||
-      (hasCodeOrName('lm') && !contains('hr')) || // Only match "lm" if it doesn't contain "hr"
-      (contains('lm') && !contains('hr') && !contains('hr admin')); // Only match "lm" if it doesn't contain "hr"
+      (hasCodeOrName('lm') && !contains('hr') && !contains('admin')) || // Only match "lm" if it doesn't contain "hr" or "admin"
+      (contains('lm') && !contains('hr') && !contains('hr admin') && !contains('admin')); // Only match "lm" if it doesn't contain "hr" or "admin"
+    
+    // For Admin: check for exact "admin" but not "super admin", "hr admin", or "lm admin"
+    const isAdmin = 
+      (hasCodeOrName('admin') || contains('admin')) && 
+      !contains('super') && 
+      !contains('hr') && 
+      !contains('lm');
     
     // Debug logging (remove in production if needed)
     if (process.env.NODE_ENV === 'development') {
       console.log('[AllModules] Roles detected:', roles);
-      console.log('[AllModules] Role flags:', { isSuperAdmin, isHR, isLM });
+      console.log('[AllModules] Role flags:', { isSuperAdmin, isHR, isLM, isAdmin });
     }
     
-    return { isSuperAdmin, isHR, isLM };
+    return { isSuperAdmin, isHR, isLM, isAdmin };
   }, [roles]);
 
   // If roles are empty (could not be read), be permissive: user already passed plugin permission to reach here.
@@ -517,15 +603,132 @@ const AllModulesPage = () => {
         isSuperAdmin: true,
         isHR: true,
         isLM: true,
+        isAdmin: true,
       };
   
   // Ensure only one role is active at a time (Super Admin takes precedence)
   const finalFlags = effectiveFlags.isSuperAdmin
-    ? { isSuperAdmin: true, isHR: false, isLM: false }
-    : { isSuperAdmin: false, isHR: effectiveFlags.isHR, isLM: effectiveFlags.isLM };
-  
+    ? { isSuperAdmin: true, isHR: false, isLM: false, isAdmin: false }
+    : { isSuperAdmin: false, isHR: effectiveFlags.isHR, isLM: effectiveFlags.isLM, isAdmin: effectiveFlags.isAdmin };
+
+  const { isSuperAdmin, isHR, isLM, isAdmin } = finalFlags;
+
+  // Fetch admin permissions for the current user and normalize them into { action, subject }[]
+  useEffect(() => {
+    if (!token) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[AllModules] No token found, skipping permissions fetch');
+      }
+      return;
+    }
+
+    const fetchPermissions = async () => {
+      try {
+        const baseURL = window.strapi?.backendURL || 'http://localhost:1337';
+        const response = await fetch(`${baseURL}/admin/users/me/permissions`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[AllModules] Permissions API error:', response.status, response.statusText);
+          }
+          return;
+        }
+
+        const data = await response.json();
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[AllModules] Raw permissions from API:', data);
+        }
+
+        const flat = [];
+
+        const flatten = (node) => {
+          if (!node) return;
+          if (Array.isArray(node)) {
+            node.forEach(flatten);
+            return;
+          }
+          if (typeof node === 'object') {
+            if (typeof node.action === 'string') {
+              flat.push(node);
+            }
+            Object.values(node).forEach(flatten);
+          }
+        };
+
+        flatten(data);
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[AllModules] Flattened permissions:', flat);
+        }
+
+        setPermissions(flat);
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[AllModules] Failed to fetch permissions:', error);
+        }
+      }
+    };
+
+    fetchPermissions();
+  }, [token]);
+
+  // Helper that answers: can the current admin user READ a given content-type UID?
+  // This is driven purely by admin permissions (Administration -> Roles & Permissions).
+  const canSee = React.useCallback(
+    (subjectUid) => {
+      if (!subjectUid) return false;
+
+      // Super Admin: always allowed
+      if (isSuperAdmin) return true;
+
+      if (!Array.isArray(permissions) || permissions.length === 0) {
+        return false;
+      }
+
+      const hasPermission = permissions.some((perm) => {
+        const action = perm?.action || '';
+        const subject = perm?.subject ?? null;
+
+        // Typical content manager "read" actions
+        const isCmRead =
+          action === 'plugin::content-manager.explorer.read' ||
+          action === 'plugin::content-manager.collection-types.read' ||
+          action === 'plugin::content-manager.single-types.read' ||
+          action === 'plugin::content-manager.collection-types.explorer.read';
+
+        // Global CM read (subject === null) means user can read all content types
+        if (isCmRead && subject == null) {
+          return true;
+        }
+
+        return isCmRead && subject === subjectUid;
+      });
+
+      return hasPermission;
+    },
+    [permissions, isSuperAdmin]
+  );
+
+  // If user has at least one "content-manager read" permission or is Super Admin, show the page.
   const canSeeAllModules =
-    finalFlags.isSuperAdmin || finalFlags.isHR || finalFlags.isLM;
+    isSuperAdmin ||
+    permissions.some((perm) => {
+      const action = perm?.action || '';
+      return (
+        action === 'plugin::content-manager.explorer.read' ||
+        action === 'plugin::content-manager.collection-types.read' ||
+        action === 'plugin::content-manager.single-types.read' ||
+        action === 'plugin::content-manager.collection-types.explorer.read'
+      );
+    });
 
   return (
     <>
@@ -553,126 +756,198 @@ const AllModulesPage = () => {
                 alignItems: 'stretch', // Make all cards same height
               }}
             >
-              {/* 1. Organization - HR + Super (hidden for LM Admin) */}
-              {(finalFlags.isSuperAdmin || finalFlags.isHR) && !finalFlags.isLM && (
+              {/* 1. Organization - driven by admin permissions */}
+              {(canSee('api::company.company') ||
+                canSee('api::company-policy.company-policy') ||
+                canSee('api::department.department') ||
+                canSee('api::designation.designation')) && (
                 <Section title="Organization" icon={Briefcase}>
-                  <AdminLink
-                    label="Company"
-                    to="/content-manager/collection-types/api::company.company"
-                  />
-                  <AdminLink
-                    label="Company Policies"
-                    to="/content-manager/collection-types/api::company-policy.company-policy"
-                  />
-                  <AdminLink
-                    label="Department"
-                    to="/content-manager/collection-types/api::department.department"
-                  />
-                  <AdminLink
-                    label="Designation"
-                    to="/content-manager/collection-types/api::designation.designation"
-                  />
+                  {canSee('api::company.company') && (
+                    <AdminLink
+                      label="Company"
+                      to="/content-manager/collection-types/api::company.company"
+                    />
+                  )}
+                  {canSee('api::company-policy.company-policy') && (
+                    <AdminLink
+                      label="Company Policies"
+                      to="/content-manager/collection-types/api::company-policy.company-policy"
+                    />
+                  )}
+                  {canSee('api::department.department') && (
+                    <AdminLink
+                      label="Department"
+                      to="/content-manager/collection-types/api::department.department"
+                    />
+                  )}
+                  {canSee('api::designation.designation') && (
+                    <AdminLink
+                      label="Designation"
+                      to="/content-manager/collection-types/api::designation.designation"
+                    />
+                  )}
                 </Section>
               )}
 
-              {/* 2. HR Management - HR + Super (hidden for LM Admin) */}
-              {(finalFlags.isSuperAdmin || finalFlags.isHR) && !finalFlags.isLM && (
+              {/* 2. HR Management - driven by admin permissions */}
+              {(canSee('plugin::users-permissions.user') ||
+                canSee('api::holiday.holiday') ||
+                canSee('api::gallery-item.gallery-item') ||
+                canSee('api::form-template.form-template')) && (
                 <Section title="HR Management" icon={User}>
-                  <AdminLink label="User" to="/content-manager/collection-types/plugin::users-permissions.user" />
-                  <AdminLink
-                    label="Holidays"
-                    to="/content-manager/collection-types/api::holiday.holiday"
-                  />
-                  <AdminLink
-                    label="Gallery Items"
-                    to="/content-manager/collection-types/api::gallery-item.gallery-item"
-                  />
-                  <AdminLink
-                    label="Form Templates"
-                    to="/content-manager/collection-types/api::form-template.form-template"
-                  />
+                  {canSee('plugin::users-permissions.user') && (
+                    <AdminLink label="User" to="/content-manager/collection-types/plugin::users-permissions.user" />
+                  )}
+                  {canSee('api::holiday.holiday') && (
+                    <AdminLink
+                      label="Holidays"
+                      to="/content-manager/collection-types/api::holiday.holiday"
+                    />
+                  )}
+                  {canSee('api::gallery-item.gallery-item') && (
+                    <AdminLink
+                      label="Gallery Items"
+                      to="/content-manager/collection-types/api::gallery-item.gallery-item"
+                    />
+                  )}
+                  {canSee('api::form-template.form-template') && (
+                    <AdminLink
+                      label="Form Templates"
+                      to="/content-manager/collection-types/api::form-template.form-template"
+                    />
+                  )}
                 </Section>
               )}
 
-              {/* 3. Location Management - HR + Super (hidden for LM Admin) */}
-              {(finalFlags.isSuperAdmin || finalFlags.isHR) && !finalFlags.isLM && (
+              {/* 3. Location Management - driven by admin permissions */}
+              {(canSee('api::area.area') ||
+                canSee('api::city.city') ||
+                canSee('api::unit-location.unit-location') ||
+                canSee('api::route.route')) && (
                 <Section title="Location Management" icon={PinMap}>
-                  <AdminLink label="Area" to="/content-manager/collection-types/api::area.area" />
-                  <AdminLink label="City" to="/content-manager/collection-types/api::city.city" />
-                  <AdminLink
-                    label="Unit Locations"
-                    to="/content-manager/collection-types/api::unit-location.unit-location"
-                  />
-                  <AdminLink label="Routes" to="/content-manager/collection-types/api::route.route" />
+                  {canSee('api::area.area') && (
+                    <AdminLink label="Area" to="/content-manager/collection-types/api::area.area" />
+                  )}
+                  {canSee('api::city.city') && (
+                    <AdminLink label="City" to="/content-manager/collection-types/api::city.city" />
+                  )}
+                  {canSee('api::unit-location.unit-location') && (
+                    <AdminLink
+                      label="Unit Locations"
+                      to="/content-manager/collection-types/api::unit-location.unit-location"
+                    />
+                  )}
+                  {canSee('api::route.route') && (
+                    <AdminLink label="Routes" to="/content-manager/collection-types/api::route.route" />
+                  )}
                 </Section>
               )}
 
-              {/* 4. Content & Communication - HR + Super (hidden for LM Admin) */}
-              {(finalFlags.isSuperAdmin || finalFlags.isHR) && !finalFlags.isLM && (
+              {/* 4. Content & Communication - driven by admin permissions */}
+              {(canSee('api::announcement.announcement') ||
+                canSee('api::notification.notification') ||
+                canSee('api::news.news') ||
+                canSee('api::news-category.news-category') ||
+                canSee('api::event.event') ||
+                canSee('api::important-link.important-link')) && (
                 <Section title="Content & Communication" icon={Message}>
-                  <AdminLink
-                    label="Announcements"
-                    to="/content-manager/collection-types/api::announcement.announcement"
-                  />
-                  <AdminLink
-                    label="Notifications"
-                    to="/content-manager/collection-types/api::notification.notification"
-                  />
-                  <AdminLink label="News" to="/content-manager/collection-types/api::news.news" />
-                  <AdminLink
-                    label="News Categories"
-                    to="/content-manager/collection-types/api::news-category.news-category"
-                  />
-                  <AdminLink label="Events" to="/content-manager/collection-types/api::event.event" />
-                  <AdminLink
-                    label="Important Links"
-                    to="/content-manager/collection-types/api::important-link.important-link"
-                  />
+                  {canSee('api::announcement.announcement') && (
+                    <AdminLink
+                      label="Announcements"
+                      to="/content-manager/collection-types/api::announcement.announcement"
+                    />
+                  )}
+                  {canSee('api::notification.notification') && (
+                    <AdminLink
+                      label="Notifications"
+                      to="/content-manager/collection-types/api::notification.notification"
+                    />
+                  )}
+                  {canSee('api::news.news') && (
+                    <AdminLink label="News" to="/content-manager/collection-types/api::news.news" />
+                  )}
+                  {canSee('api::news-category.news-category') && (
+                    <AdminLink
+                      label="News Categories"
+                      to="/content-manager/collection-types/api::news-category.news-category"
+                    />
+                  )}
+                  {canSee('api::event.event') && (
+                    <AdminLink label="Events" to="/content-manager/collection-types/api::event.event" />
+                  )}
+                  {canSee('api::important-link.important-link') && (
+                    <AdminLink
+                      label="Important Links"
+                      to="/content-manager/collection-types/api::important-link.important-link"
+                    />
+                  )}
                 </Section>
               )}
 
-              {/* 5. Learning Management - LM + Super (hidden for HR Admin) */}
-              {(finalFlags.isSuperAdmin || finalFlags.isLM) && !finalFlags.isHR && (
+              {/* 5. Learning Management - driven by admin permissions */}
+              {(canSee('api::course.course') ||
+                canSee('api::course-category.course-category') ||
+                canSee('api::course-module.course-module') ||
+                canSee('api::course-assignment.course-assignment')) && (
                 <Section title="Learning Management" icon={Book}>
-                  <AdminLink
-                    label="Courses"
-                    to="/content-manager/collection-types/api::course.course"
-                  />
-                  <AdminLink
-                    label="Course Categories"
-                    to="/content-manager/collection-types/api::course-category.course-category"
-                  />
-                  <AdminLink
-                    label="Course Modules"
-                    to="/content-manager/collection-types/api::course-module.course-module"
-                  />
-                  <AdminLink
-                    label="Course Assignments"
-                    to="/content-manager/collection-types/api::course-assignment.course-assignment"
-                  />
+                  {canSee('api::course.course') && (
+                    <AdminLink
+                      label="Courses"
+                      to="/content-manager/collection-types/api::course.course"
+                    />
+                  )}
+                  {canSee('api::course-category.course-category') && (
+                    <AdminLink
+                      label="Course Categories"
+                      to="/content-manager/collection-types/api::course-category.course-category"
+                    />
+                  )}
+                  {canSee('api::course-module.course-module') && (
+                    <AdminLink
+                      label="Course Modules"
+                      to="/content-manager/collection-types/api::course-module.course-module"
+                    />
+                  )}
+                  {canSee('api::course-assignment.course-assignment') && (
+                    <AdminLink
+                      label="Course Assignments"
+                      to="/content-manager/collection-types/api::course-assignment.course-assignment"
+                    />
+                  )}
                 </Section>
               )}
 
-              {/* 6. Quiz Management - LM + Super (hidden for HR Admin) */}
-              {(finalFlags.isSuperAdmin || finalFlags.isLM) && !finalFlags.isHR && (
+              {/* 6. Quiz Management - driven by admin permissions */}
+              {(canSee('api::quizze.quizze') ||
+                canSee('api::quiz-question.quiz-question') ||
+                canSee('api::quiz-submission.quiz-submission') ||
+                canSee('api::user-progress.user-progress')) && (
                 <Section title="Quiz Management" icon={Question}>
                   {/* NOTE: Real UID is api::quizze.quizze; keeping label as "Quizzes" */}
-                  <AdminLink
-                    label="Quizzes"
-                    to="/content-manager/collection-types/api::quizze.quizze"
-                  />
-                  <AdminLink
-                    label="Quiz Questions"
-                    to="/content-manager/collection-types/api::quiz-question.quiz-question"
-                  />
-                  <AdminLink
-                    label="Quiz Submissions"
-                    to="/content-manager/collection-types/api::quiz-submission.quiz-submission"
-                  />
-                  <AdminLink
-                    label="User Progress"
-                    to="/content-manager/collection-types/api::user-progress.user-progress"
-                  />
+                  {canSee('api::quizze.quizze') && (
+                    <AdminLink
+                      label="Quizzes"
+                      to="/content-manager/collection-types/api::quizze.quizze"
+                    />
+                  )}
+                  {canSee('api::quiz-question.quiz-question') && (
+                    <AdminLink
+                      label="Quiz Questions"
+                      to="/content-manager/collection-types/api::quiz-question.quiz-question"
+                    />
+                  )}
+                  {canSee('api::quiz-submission.quiz-submission') && (
+                    <AdminLink
+                      label="Quiz Submissions"
+                      to="/content-manager/collection-types/api::quiz-submission.quiz-submission"
+                    />
+                  )}
+                  {canSee('api::user-progress.user-progress') && (
+                    <AdminLink
+                      label="User Progress"
+                      to="/content-manager/collection-types/api::user-progress.user-progress"
+                    />
+                  )}
                 </Section>
               )}
 

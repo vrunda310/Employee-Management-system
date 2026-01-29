@@ -15,8 +15,26 @@
       "type": "string",
       "required": true
     },
-    "file": {
+    "form_type": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "PDF",
+        "URL"
+      ]
+    },
+    "form_pdf": {
       "type": "media",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "form_type"
+            },
+            "PDF"
+          ]
+        }
+      },
       "multiple": false,
       "required": true,
       "allowedTypes": [
@@ -26,12 +44,43 @@
         "audios"
       ]
     },
-    "tags": {
-      "type": "string"
+    "is_downloadable": {
+      "type": "boolean",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "form_type"
+            },
+            "PDF"
+          ]
+        }
+      },
+      "required": true,
+      "default": false
+    },
+    "form_url": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "form_type"
+            },
+            "URL"
+          ]
+        }
+      },
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
     },
     "is_active": {
       "type": "boolean",
-      "required": true
+      "required": true,
+      "default": true
     },
     "company": {
       "type": "relation",
