@@ -16,7 +16,8 @@
       "required": true
     },
     "description": {
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "start_date": {
       "type": "datetime",
@@ -52,7 +53,8 @@
     },
     "is_active": {
       "type": "boolean",
-      "required": true
+      "required": true,
+      "default": true
     },
     "is_featured": {
       "type": "boolean",
@@ -88,13 +90,8 @@
       }
     },
     "event_type": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "International",
-        "National",
-        "Regional"
-      ]
+      "type": "string",
+      "required": true
     }
   }
 }
