@@ -459,7 +459,9 @@ export interface ApiAnnouncementAnnouncement
       'api::designation.designation'
     >;
     end_date: Schema.Attribute.Date & Schema.Attribute.Required;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     is_important: Schema.Attribute.Boolean & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -505,7 +507,9 @@ export interface ApiAreaArea extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::area.area'> &
       Schema.Attribute.Private;
@@ -533,7 +537,9 @@ export interface ApiCityCity extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::city.city'> &
       Schema.Attribute.Private;
@@ -564,7 +570,9 @@ export interface ApiCompanyPolicyCompanyPolicy
       Schema.Attribute.Private;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     document: Schema.Attribute.Media<'images' | 'files', true>;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -598,7 +606,9 @@ export interface ApiCompanyCompany extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -638,7 +648,6 @@ export interface ApiCourseAssignmentCourseAssignment
       ['Department', 'Location', 'Role', 'Individual']
     > &
       Schema.Attribute.Required;
-    completion_date: Schema.Attribute.Date & Schema.Attribute.Required;
     course: Schema.Attribute.Relation<'manyToOne', 'api::course.course'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -647,6 +656,7 @@ export interface ApiCourseAssignmentCourseAssignment
       'manyToMany',
       'api::department.department'
     >;
+    due_date: Schema.Attribute.Date & Schema.Attribute.Required;
     individual_user: Schema.Attribute.Relation<
       'manyToMany',
       'plugin::users-permissions.user'
@@ -737,6 +747,9 @@ export interface ApiCourseModuleCourseModule
       'api::course-module.course-module'
     > &
       Schema.Attribute.Private;
+    mark_as_read: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     module_content_type: Schema.Attribute.Enumeration<
       ['Video', 'Pdf', 'Scorm', 'Text']
     > &
@@ -772,17 +785,10 @@ export interface ApiCourseCourse extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    certificate_template: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios'
-    >;
     company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
     course_category: Schema.Attribute.Relation<
       'manyToOne',
       'api::course-category.course-category'
-    >;
-    course_created_by: Schema.Attribute.Relation<
-      'manyToOne',
-      'plugin::users-permissions.user'
     >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -790,15 +796,14 @@ export interface ApiCourseCourse extends Struct.CollectionTypeSchema {
     description: Schema.Attribute.Blocks & Schema.Attribute.Required;
     difficulty_level: Schema.Attribute.Enumeration<
       ['Beginner', 'Intermediate', 'Advanced']
-    > &
-      Schema.Attribute.Required;
-    duration_minutes: Schema.Attribute.Integer & Schema.Attribute.Required;
+    >;
+    duration_hours: Schema.Attribute.Integer & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     is_mandatory: Schema.Attribute.Boolean & Schema.Attribute.Required;
     is_optional: Schema.Attribute.Boolean & Schema.Attribute.Required;
     is_orientation_course: Schema.Attribute.Boolean & Schema.Attribute.Required;
-    is_published: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -836,7 +841,9 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     department_code: Schema.Attribute.String;
     description: Schema.Attribute.Text;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -874,7 +881,9 @@ export interface ApiDesignationDesignation extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::department.department'
     >;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -912,7 +921,7 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::department.department'
     >;
-    description: Schema.Attribute.Text;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
     end_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
     event_created_by: Schema.Attribute.Relation<
       'manyToOne',
@@ -922,11 +931,10 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required;
     event_location: Schema.Attribute.Text & Schema.Attribute.Required;
     event_owner: Schema.Attribute.String & Schema.Attribute.Required;
-    event_type: Schema.Attribute.Enumeration<
-      ['International', 'National', 'Regional']
-    > &
-      Schema.Attribute.Required;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    event_type: Schema.Attribute.String & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     is_featured: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<false>;
@@ -958,9 +966,18 @@ export interface ApiFormTemplateFormTemplate
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    file: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    form_pdf: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
       Schema.Attribute.Required;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    form_type: Schema.Attribute.Enumeration<['PDF', 'URL']> &
+      Schema.Attribute.Required;
+    form_url: Schema.Attribute.String & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    is_downloadable: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -968,7 +985,6 @@ export interface ApiFormTemplateFormTemplate
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    tags: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -992,7 +1008,9 @@ export interface ApiGalleryItemGalleryItem extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Blocks;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1040,7 +1058,9 @@ export interface ApiHolidayHoliday extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required;
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
       Schema.Attribute.Required;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     is_optional: Schema.Attribute.Boolean;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -1077,7 +1097,10 @@ export interface ApiImportantLinkImportantLink
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     display_order: Schema.Attribute.Integer & Schema.Attribute.Required;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    icon: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1110,7 +1133,9 @@ export interface ApiNewsCategoryNewsCategory
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1145,7 +1170,9 @@ export interface ApiNewsNews extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     is_featured: Schema.Attribute.Boolean & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::news.news'> &
@@ -1281,6 +1308,7 @@ export interface ApiQuizSubmissionQuizSubmission
     publishedAt: Schema.Attribute.DateTime;
     quiz: Schema.Attribute.Relation<'manyToOne', 'api::quizze.quizze'>;
     score: Schema.Attribute.Integer & Schema.Attribute.Required;
+    submitted_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     submitted_by: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.user'
@@ -1349,7 +1377,9 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::route.route'> &
       Schema.Attribute.Private;
@@ -1394,7 +1424,9 @@ export interface ApiUnitLocationUnitLocation
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     is_factory_location: Schema.Attribute.Boolean & Schema.Attribute.Required;
     is_office_location: Schema.Attribute.Boolean & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1436,7 +1468,7 @@ export interface ApiUserProgressUserProgress
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    last_accessed: Schema.Attribute.DateTime;
+    last_accessed_at: Schema.Attribute.DateTime & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1938,6 +1970,7 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'api::department.department'
     >;
+    description: Schema.Attribute.Text;
     designation: Schema.Attribute.Relation<
       'manyToOne',
       'api::designation.designation'
@@ -1953,7 +1986,9 @@ export interface PluginUsersPermissionsUser
     employment_type: Schema.Attribute.String & Schema.Attribute.Required;
     exit_date: Schema.Attribute.Date & Schema.Attribute.Required;
     ext: Schema.Attribute.Integer & Schema.Attribute.Required;
-    is_active: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    is_active: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     joining_date: Schema.Attribute.Date & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<

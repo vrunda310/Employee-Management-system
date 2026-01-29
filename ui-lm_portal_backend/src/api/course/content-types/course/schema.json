@@ -29,20 +29,20 @@
         "audios"
       ]
     },
-    "duration_minutes": {
+    "duration_hours": {
       "type": "integer",
       "required": true
     },
     "difficulty_level": {
       "type": "enumeration",
-      "required": true,
+      "required": false,
       "enum": [
         "Beginner",
         "Intermediate",
         "Advanced"
       ]
     },
-    "is_published": {
+    "is_active": {
       "type": "boolean",
       "required": true,
       "default": false
@@ -50,21 +50,6 @@
     "passing_score": {
       "type": "integer",
       "required": true
-    },
-    "certificate_template": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
-    "course_created_by": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user"
     },
     "course_category": {
       "type": "relation",
