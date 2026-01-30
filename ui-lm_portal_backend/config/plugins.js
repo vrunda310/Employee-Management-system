@@ -9,5 +9,15 @@ module.exports = () => ({
     enabled: true,
     resolve: './src/plugins/modules-sidebar',
   },
+  /**
+   * Local plugin: Analytics Dashboard
+   *
+   * - Custom analytics API endpoints for Learning & Overall dashboards.
+   * - Global + Personal views with filters.
+   */
+  'analytics-dashboard': {
+    enabled: true,
+    resolve: './src/plugins/analytics-dashboard',
+  },
 });
 
