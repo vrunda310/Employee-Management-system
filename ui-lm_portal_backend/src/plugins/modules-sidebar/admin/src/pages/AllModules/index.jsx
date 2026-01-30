@@ -849,8 +849,15 @@ const AllModulesPage = () => {
                 canSee('api::news.news') ||
                 canSee('api::news-category.news-category') ||
                 canSee('api::event.event') ||
-                canSee('api::important-link.important-link')) && (
+                canSee('api::important-link.important-link') ||
+                canSee('api::townhall.townhall')) && (
                 <Section title="Content & Communication" icon={Message}>
+                  {canSee('api::townhall.townhall') && (
+                    <AdminLink
+                      label="Townhall"
+                      to="/content-manager/collection-types/api::townhall.townhall"
+                    />
+                  )}
                   {canSee('api::announcement.announcement') && (
                     <AdminLink
                       label="Announcements"
