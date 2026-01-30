@@ -46,11 +46,6 @@
       "type": "text",
       "required": true
     },
-    "event_created_by": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user"
-    },
     "is_active": {
       "type": "boolean",
       "required": true,

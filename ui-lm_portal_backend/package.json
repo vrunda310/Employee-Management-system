@@ -10,12 +10,14 @@
     "dev": "strapi develop",
     "develop": "strapi develop",
     "seed:example": "node ./scripts/seed.js",
+    "seed:portal": "node ./scripts/seed-portal.js",
     "start": "strapi start",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
+    "recharts": "^2.15.0",
     "@strapi/plugin-cloud": "5.33.1",
     "@strapi/plugin-users-permissions": "5.33.1",
     "@strapi/strapi": "5.33.1",

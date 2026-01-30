@@ -569,7 +569,7 @@ export interface ApiCompanyPolicyCompanyPolicy
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
-    document: Schema.Attribute.Media<'images' | 'files', true>;
+    document: Schema.Attribute.Media<'files'>;
     is_active: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
@@ -923,10 +923,6 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     >;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     end_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    event_created_by: Schema.Attribute.Relation<
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
     event_created_for: Schema.Attribute.Enumeration<['All', 'department']> &
       Schema.Attribute.Required;
     event_location: Schema.Attribute.Text & Schema.Attribute.Required;
@@ -1394,6 +1390,43 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::unit-location.unit-location'
     >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTownhallTownhall extends Struct.CollectionTypeSchema {
+  collectionName: 'townhalls';
+  info: {
+    displayName: 'Townhall';
+    pluralName: 'townhalls';
+    singularName: 'townhall';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    company: Schema.Attribute.Relation<'manyToOne', 'api::company.company'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::townhall.townhall'
+    > &
+      Schema.Attribute.Private;
+    meeting_content_type: Schema.Attribute.Enumeration<['Video', 'Pdf']> &
+      Schema.Attribute.Required;
+    meeting_date: Schema.Attribute.Date & Schema.Attribute.Required;
+    meeting_document: Schema.Attribute.Media<'files'> &
+      Schema.Attribute.Required;
+    meeting_video: Schema.Attribute.Media<'videos' | 'audios'> &
+      Schema.Attribute.Required;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1984,7 +2017,7 @@ export interface PluginUsersPermissionsUser
     emp_id: Schema.Attribute.String & Schema.Attribute.Required;
     employee_name: Schema.Attribute.String & Schema.Attribute.Required;
     employment_type: Schema.Attribute.String & Schema.Attribute.Required;
-    exit_date: Schema.Attribute.Date & Schema.Attribute.Required;
+    exit_date: Schema.Attribute.Date;
     ext: Schema.Attribute.Integer & Schema.Attribute.Required;
     is_active: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
@@ -2059,6 +2092,7 @@ declare module '@strapi/strapi' {
       'api::quiz-submission.quiz-submission': ApiQuizSubmissionQuizSubmission;
       'api::quizze.quizze': ApiQuizzeQuizze;
       'api::route.route': ApiRouteRoute;
+      'api::townhall.townhall': ApiTownhallTownhall;
       'api::unit-location.unit-location': ApiUnitLocationUnitLocation;
       'api::user-progress.user-progress': ApiUserProgressUserProgress;
       'plugin::content-releases.release': PluginContentReleasesRelease;
